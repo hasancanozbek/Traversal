@@ -1,6 +1,8 @@
-﻿namespace EntityLayer.Concretes
+﻿using EntityLayer.Abstracts;
+
+namespace EntityLayer.Concretes
 {
-    public class City
+    public class City : IEntity
     {
         public int CountryId { get; set; }
         public string Name { get; set; }
