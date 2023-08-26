@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Entity\EntityLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Concretes\" />
+    <Folder Include="EntityFrameworkCore\Configurations\" />
+  </ItemGroup>
+
 </Project>
