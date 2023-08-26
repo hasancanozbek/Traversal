@@ -1,5 +1,4 @@
-﻿
-using DataAccessLayer.EntityFrameworkCore;
+﻿using DataAccessLayer.EntityFrameworkCore;
 using EntityLayer.Abstracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace DataAccessLayer.Abstracts
 {
-    public class GenericRepository<T> where T : IEntity, new()
+    public class GenericRepository<T> : IGenericRepository<T> where T : IEntity, new()
     {
         private readonly TraversalDbContext context;
 

@@ -5,7 +5,7 @@ using EntityLayer.Concretes;
 
 namespace DataAccessLayer.Concretes
 {
-    public class GuideRepository : GenericRepository<Guide>
+    public class GuideRepository : GenericRepository<Guide>, IGuideRepository
     {
         public GuideRepository(TraversalDbContext context) : base(context)
         {

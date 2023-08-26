@@ -5,7 +5,7 @@ using EntityLayer.Concretes;
 
 namespace DataAccessLayer.Concretes
 {
-    public class LocationRepository : GenericRepository<Location>
+    public class LocationRepository : GenericRepository<Location>, ILocationRepository
     {
         public LocationRepository(TraversalDbContext context) : base(context)
         {

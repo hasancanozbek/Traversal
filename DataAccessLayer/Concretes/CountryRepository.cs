@@ -5,7 +5,7 @@ using EntityLayer.Concretes;
 
 namespace DataAccessLayer.Concretes
 {
-    public class CountryRepository : GenericRepository<Country>
+    public class CountryRepository : GenericRepository<Country>, ICountryRepository
     {
         public CountryRepository(TraversalDbContext context) : base(context)
         {
