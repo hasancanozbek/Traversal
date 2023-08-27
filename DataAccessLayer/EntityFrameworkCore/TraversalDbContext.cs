@@ -56,5 +56,6 @@ namespace DataAccessLayer.EntityFrameworkCore
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<TripLocations> TripLocations { get; set; }
     }
 }

@@ -8,8 +8,9 @@ namespace EntityLayer.Concretes
         public string Description { get; set; }
         public int Price { get; set; }
         public int GuideId { get; set; }
-        public int Limit { get; set; }
+        public int Capacity { get; set; }
         public DateTime PlannedDate { get; set; }
+        public int Day { get; set; }
         public List<string> ImageList { get; set; }
 
         //Navigation Properties
