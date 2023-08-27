@@ -12,7 +12,7 @@ namespace EntityLayer.Concretes
         //Navigation Properties
         public Country Country { get; set; }
         public City City { get; set; }
-        public List<Trip> TripList { get; set; }
+        public List<Trip> Trips { get; set; }
 
     }
 }
