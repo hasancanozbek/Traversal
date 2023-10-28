@@ -11,5 +11,6 @@ namespace EntityLayer.Concretes
 
         //Navigation Properties
         public List<Blog> BlogList { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

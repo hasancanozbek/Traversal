@@ -33,7 +33,7 @@ namespace DataAccessLayer.Abstracts
             {
                 query = query.AsNoTracking();
             }
-            return query;
+            return  query;
         }
 
         public async Task<T> GetByIdAsync(int id, bool tracking = true)

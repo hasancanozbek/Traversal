@@ -1,0 +1,111 @@
+﻿<footer>
+    <!-- footer -->
+    <section class="w3l-footer">
+        <div class="w3l-footer-16-main py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 column">
+                        <div class="row">
+                            <div class="col-md-4 column">
+                                <h3>Şirketimiz</h3>
+                                <ul class="footer-gd-16">
+                                    <li><a href="../Home/Index">Anasayfa</a></li>
+                                    <li><a href="~/Traversal-Starter/about.html">Hakkımızda</a></li>
+                                    <li><a href="~/Traversal-Starter/contact.html">İletişim</a></li>
+                                    <li><a href="">Vizyon ve Misyonumuz</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 column mt-md-0 mt-4">
+                                <h3>Faydalı Linkler</h3>
+                                <ul class="footer-gd-16">
+                                    <li><a href="#url">Lokasyonlar</a></li>
+                                    <li><a href="#url">İş Ortaklarımız</a></li>
+                                    <li><a href="#url">Son Blog Yazıları</a></li>
+                                    <li><a href="#url">Rehberlerimiz</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 column mt-md-0 mt-4">
+                                <h3>Hizmetlerimiz</h3>
+                                <ul class="footer-gd-16">
+                                    <li><a href="#url">Gizlilik Politikamız</a></li>
+                                    <li><a href="#url">Şartlarımız</a></li>
+                                    <li><a href="~/Traversal-Starter/services.html">Hizmetlerimiz</a></li>
+                                    <li><a href="../Home/Index">Anasayfa</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 column pl-lg-5 column4 mt-lg-0 mt-5">
+                        <h3>Bültenler</h3>
+                        <div class="end-column">
+                            <h4>Yeni kampanya ve hizmetlerimizden ilk siz haberdar olun.</h4>
+                            <form action="#" class="subscribe" method="post">
+                                <input type="email" name="email" placeholder="Email Adresiniz" required="">
+                                <button type="submit">Bültene Kaydol</button>
+                            </form>
+                            <p>Sizlere en yeni haberlerimizi ve sınırlı süreli kampanyalarımızı iletebilmemiz için bültenimize abone olun. Merak etmeyin spam mailler göndermiyoruz :)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex below-section justify-content-between align-items-center pt-4 mt-5">
+                    <div class="columns text-lg-left text-center">
+                        <p>
+                            &copy; 2023 Traversal. All rights reserved.
+                        </p>
+                        <p>
+                            Hasan Can Özbek
+                        </p>
+                    </div>
+                    <div class="columns-2 mt-lg-0 mt-3">
+                        <ul class="social">
+                            <li>
+                                <a href="https://www.linkedin.com/in/hasan-can-ozbek/"><span class="fa fa-linkedin" aria-hidden="true"></span></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/hasancanozbekk/"><span class="fa fa-instagram" aria-hidden="true"></span></a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/hasancanozbek"><span class="fa fa-github" aria-hidden="true"></span></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- move top -->
+        <button onclick="topFunction()" id="movetop" title="Go to top">
+            <span class="fa fa-angle-up"></span>
+        </button>
+        <script>
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function () {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("movetop").style.display = "block";
+                } else {
+                    document.getElementById("movetop").style.display = "none";
+                }
+            }
+
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+        <!-- //move top -->
+        <script>
+            $(function () {
+                $('.navbar-toggler').click(function () {
+                    $('body').toggleClass('noscroll');
+                })
+            });
+        </script>
+    </section>
+    <!-- //footer -->
+</footer>

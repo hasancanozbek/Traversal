@@ -18,7 +18,7 @@ namespace DataAccessLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -97,6 +97,45 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concretes.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Star")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TripId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("TripId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.Country", b =>
@@ -370,21 +409,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("TripLocations");
                 });
 
-            modelBuilder.Entity("LocationTrip", b =>
-                {
-                    b.Property<int>("LocationListId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TripListId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("LocationListId", "TripListId");
-
-                    b.HasIndex("TripListId");
-
-                    b.ToTable("LocationTrip");
-                });
-
             modelBuilder.Entity("EntityLayer.Concretes.Blog", b =>
                 {
                     b.HasOne("EntityLayer.Concretes.Customer", "Customer")
@@ -405,6 +429,25 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concretes.Comment", b =>
+                {
+                    b.HasOne("EntityLayer.Concretes.Customer", "Customer")
+                        .WithMany("Comments")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Concretes.Trip", "Trip")
+                        .WithMany("Comments")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Trip");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.CustomerTrip", b =>
@@ -475,21 +518,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Trip");
                 });
 
-            modelBuilder.Entity("LocationTrip", b =>
-                {
-                    b.HasOne("EntityLayer.Concretes.Location", null)
-                        .WithMany()
-                        .HasForeignKey("LocationListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EntityLayer.Concretes.Trip", null)
-                        .WithMany()
-                        .HasForeignKey("TripListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EntityLayer.Concretes.City", b =>
                 {
                     b.Navigation("LocationList");
@@ -505,11 +533,18 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concretes.Customer", b =>
                 {
                     b.Navigation("BlogList");
+
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.Guide", b =>
                 {
                     b.Navigation("TripList");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concretes.Trip", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

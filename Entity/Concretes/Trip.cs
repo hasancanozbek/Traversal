@@ -15,6 +15,6 @@ namespace EntityLayer.Concretes
 
         //Navigation Properties
         public Guide Guide { get; set; }
-        public List<Location> Locations { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }
