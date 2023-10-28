@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Dtos.Comment;
 using EntityLayer.Concretes;
 
 namespace BusinessLayer.Dtos

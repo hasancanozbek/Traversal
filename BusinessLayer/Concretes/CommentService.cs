@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
-using BusinessLayer.Dtos;
+using BusinessLayer.Dtos.Comment;
 using DataAccessLayer.Abstracts;
 using EntityLayer.Concretes;
 

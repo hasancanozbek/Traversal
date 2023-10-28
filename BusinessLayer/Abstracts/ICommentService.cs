@@ -1,5 +1,4 @@
-﻿
-using BusinessLayer.Dtos;
+﻿using BusinessLayer.Dtos.Comment;
 using EntityLayer.Concretes;
 
 namespace BusinessLayer.Abstracts

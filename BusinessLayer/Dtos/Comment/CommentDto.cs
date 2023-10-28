@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer.Dtos
+﻿namespace BusinessLayer.Dtos.Comment
 {
     public class CommentDto
     {
