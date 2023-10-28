@@ -1,10 +1,16 @@
-﻿using EntityLayer.Concretes;
+﻿using BusinessLayer.Dtos.Customers;
+using Core.Utilities.Results;
+using EntityLayer.Concretes;
 
 namespace BusinessLayer.Abstracts
 {
     public interface ICustomerService
     {
-        IQueryable<Customer> GetAllCustomerList();
-        Task<Customer> GetCustomerById(int customerId);
+        DataResult<List<CustomerDto>> GetAllCustomerList();
+        DataResult<IQueryable<Customer>> GetAllCustomersAsQueryable();
+        Task<DataResult<CustomerDto>> GetCustomerById(int customerId);
+        Task<Result> AddCustomer(AddCustomerDto customer);
+        Task<DataResult<CustomerDto>> UpdateCustomer(int customerId, UpdateCustomerDto customer);
+        Task<Result> DeleteCustomer(CustomerDto customer);
     }
 }

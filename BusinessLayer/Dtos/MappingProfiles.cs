@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using BusinessLayer.Dtos.Comment;
+using BusinessLayer.Dtos.Comments;
+using BusinessLayer.Dtos.Customers;
 using EntityLayer.Concretes;
 
 namespace BusinessLayer.Dtos
@@ -9,6 +10,9 @@ namespace BusinessLayer.Dtos
         public MappingProfiles() 
         {
             CreateMap<Comment, CommentDto>().ReverseMap();
+            CreateMap<Customer, AddCustomerDto>().ReverseMap();
+            CreateMap<Customer, UpdateCustomerDto>().ReverseMap();
+            CreateMap<Customer, CustomerDto>().ReverseMap();
         }
     }
 }

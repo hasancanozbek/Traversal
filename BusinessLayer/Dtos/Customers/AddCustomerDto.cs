@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer.Dtos.Customer
+﻿namespace BusinessLayer.Dtos.Customers
 {
     public class AddCustomerDto
     {

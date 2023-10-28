@@ -58,36 +58,41 @@ namespace DataAccessLayer.Abstracts
         public async Task<bool> AddAsync(T entity)
         {
             EntityEntry<T> entityEntry = await Table.AddAsync(entity);
+            await SaveAsync();
             return entityEntry.State == EntityState.Added;
         }
 
         public async Task<bool> AddRangeAsync(List<T> entities)
         {
             await Table.AddRangeAsync(entities);
+            await SaveAsync();
             return true;
         }
 
-        public bool Remove(T entity)
+        public async Task<bool> Remove(T entity)
         {
             EntityEntry<T> entityEntry = Table.Remove(entity);
+            await SaveAsync();
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public bool RemoveRange(List<T> entities)
+        public async Task<bool> RemoveRange(List<T> entities)
         {
             Table.RemoveRange(entities);
+            await SaveAsync();
             return true;
         }
 
         public async Task<bool> RemoveAsync(T entity)
         {
             T model = await GetByIdAsync(entity.Id);
-            return Remove(model);
+            return await Remove(model);
         }
 
-        public bool Update(T entity)
+        public async Task<bool> Update(T entity)
         {
             EntityEntry entityEntry = Table.Update(entity);
+            await SaveAsync();
             return entityEntry.State == EntityState.Modified;
         }
 

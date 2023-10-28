@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Dtos.Comment;
+﻿using BusinessLayer.Dtos.Comments;
 using EntityLayer.Concretes;
 
 namespace BusinessLayer.Abstracts
@@ -8,6 +8,6 @@ namespace BusinessLayer.Abstracts
         List<CommentDto> GetCommentDtoListOfCustomer(int customerId);
         IQueryable<Comment> GetAllCommentList();
         List<CommentDto> GetAllCommentDtoList();
-        CommentDto GetCommentDtoById(int id);
+        Task<CommentDto> GetCommentDtoById(int id);
     }
 }

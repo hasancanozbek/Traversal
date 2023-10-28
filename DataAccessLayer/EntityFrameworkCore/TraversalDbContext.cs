@@ -28,10 +28,6 @@ namespace DataAccessLayer.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseNpgsql(Configuration.ConnectionString);
-        //}
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var datas = ChangeTracker.Entries<IEntity>();

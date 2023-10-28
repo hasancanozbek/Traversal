@@ -1,7 +1,9 @@
-﻿using BusinessLayer.Dtos.Customer;
+﻿using BusinessLayer.Abstracts;
+using BusinessLayer.Dtos.Customers;
 using Core.Utilities.Results;
 using EntityLayer.Concretes;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Traversal.API.Controllers
@@ -10,34 +12,67 @@ namespace Traversal.API.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        [HttpGet]
-        public DataResult<List<Customer>> GetAllCustomers()
+        private readonly ICustomerService customerService;
+
+        public CustomersController(ICustomerService customerService)
         {
+            this.customerService = customerService;
+        }
+
+        [HttpGet("GetAllCustomers")]
+        public IActionResult GetAllCustomers()
+        {
+            var result = customerService.GetAllCustomerList();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            };
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetCustomerById")]
+        public async Task<IActionResult> GetCustomerById(int id)
+        {
+            var result = await customerService.GetCustomerById(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("AddCustomer")]
+        public async Task<IActionResult> AddCustomer(AddCustomerDto customer)
+        {
+            var result = await customerService.AddCustomer(customer);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPut("UpdateCustomer")]
+        public async Task<IActionResult> UpdateCustomer(int customerId ,UpdateCustomerDto customer)
+        {
+            var result = await customerService.UpdateCustomer(customerId, customer);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
 
         }
 
-        [HttpGet]
-        public DataResult<Customer> GetCustomerById(int id)
+        [HttpDelete("DeleteCustomer")]
+        public async Task<IActionResult> DeleteCustomer(CustomerDto customer)
         {
-
-        }
-
-        [HttpPost]
-        public Result AddCustomer(AddCustomerDto customer)
-        {
-
-        }
-
-        [HttpPut]
-        public DataResult<Customer> UpdateCustomer(int customerId ,UpdateCustomerDto customer)
-        {
-
-        }
-
-        [HttpDelete]
-        public Result DeleteCustomer(CustomerDto customer)
-        {
-
+            var result = await customerService.DeleteCustomer(customer);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

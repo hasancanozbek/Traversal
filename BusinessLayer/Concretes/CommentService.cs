@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
-using BusinessLayer.Dtos.Comment;
+using BusinessLayer.Dtos.Comments;
 using DataAccessLayer.Abstracts;
 using EntityLayer.Concretes;
 
@@ -28,7 +28,7 @@ namespace BusinessLayer.Concretes
                 var commentDtoList = mapper.Map<List<CommentDto>>(GetAllCommentList().ToList());
                 var commentCustomerIdList = commentDtoList.Select(s => s.CustomerId);
                 var commentTripIdList = commentDtoList.Select(s => s.TripId);
-                var customers = customerService.GetAllCustomerList().Where(s => commentCustomerIdList.Contains(s.Id));
+                var customers = customerService.GetAllCustomerList().Data.Where(s => commentCustomerIdList.Contains(s.Id));
                 var trips = tripService.GetAllTripList().Where(s => commentTripIdList.Contains(s.Id));
 
                 foreach (var comment in commentDtoList)
@@ -59,14 +59,14 @@ namespace BusinessLayer.Concretes
             return commentRepository.GetAll();
         }
 
-        public CommentDto GetCommentDtoById(int id)
+        public async Task<CommentDto> GetCommentDtoById(int id)
         {
-            var comment = mapper.Map<Task<CommentDto>>(commentRepository.GetByIdAsync(id).Result).Result;
-            var trip = tripService.GetTripById(comment.TripId).Result;
-            var customer = customerService.GetCustomerById(comment.CustomerId).Result;
-            comment.CustomerEmail = customer.Email;
-            comment.CustomerFirstName = customer.FirstName;
-            comment.CustomerLastName = customer.LastName;
+            var comment = await mapper.Map<Task<CommentDto>>(commentRepository.GetByIdAsync(id));
+            var trip = await tripService.GetTripById(comment.TripId);
+            var customer = await customerService.GetCustomerById(comment.CustomerId);
+            comment.CustomerEmail = customer.Data.Email;
+            comment.CustomerFirstName = customer.Data.FirstName;
+            comment.CustomerLastName = customer.Data.LastName;
             comment.TripName = trip.Title;
             comment.TripDate = trip.PlannedDate;
             return comment;

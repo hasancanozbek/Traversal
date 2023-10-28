@@ -11,10 +11,10 @@ namespace DataAccessLayer.Abstracts
         Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true);
         Task<bool> AddAsync(T entity);
         Task<bool> AddRangeAsync(List<T> entities);
-        bool Remove(T entity);
-        bool RemoveRange(List<T> entities);
+        Task<bool> Remove(T entity);
+        Task<bool> RemoveRange(List<T> entities);
         Task<bool> RemoveAsync(T entity);
-        bool Update(T entity);
+        Task<bool> Update(T entity);
         Task<int> SaveAsync();
     }
 }

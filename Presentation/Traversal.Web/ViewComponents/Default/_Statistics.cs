@@ -20,7 +20,7 @@ namespace Traversal.Web.ViewComponents.Default
         public IViewComponentResult Invoke()
         {
 
-            ViewBag.TotalCustomer = customerService.GetAllCustomerList().Count();
+            ViewBag.TotalCustomer = customerService.GetAllCustomerList().Data.Count();
             ViewBag.TotalTrip = tripService.GetAllTripList().Count();
             ViewBag.TotalLocation = locationService.GetAllLocationList().Count();
             ViewBag.TotalGuide = guideService.GetAllGuideList().Count();
