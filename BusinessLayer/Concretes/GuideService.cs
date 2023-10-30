@@ -1,4 +1,7 @@
-﻿using BusinessLayer.Abstracts;
+﻿using AutoMapper;
+using BusinessLayer.Abstracts;
+using BusinessLayer.Dtos.Guides;
+using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
 using EntityLayer.Concretes;
 
@@ -7,20 +10,65 @@ namespace BusinessLayer.Concretes
     public class GuideService : IGuideService
     {
         private readonly IGuideRepository guideRepository;
+        private readonly IMapper mapper;
 
-        public GuideService(IGuideRepository guideRepository)
+        public GuideService(IGuideRepository guideRepository, IMapper mapper)
         {
             this.guideRepository = guideRepository;
+            this.mapper = mapper;
         }
 
-        public IQueryable<Guide> GetAllGuideList()
+        public async Task<Result> AddGuide(AddGuideDto guide)
         {
-            return guideRepository.GetAll();
+            var guideEntity = mapper.Map<Guide>(guide);
+            await guideRepository.AddAsync(guideEntity);
+            return new SuccessResult("Guide added");
         }
 
-        public Task<Guide> GetGuideById(int guideId)
+        public async Task<Result> DeleteGuide(GuideDto guide)
         {
-            return guideRepository.GetByIdAsync(guideId);
+            var guideEntity = mapper.Map<Guide>(guide);
+            await guideRepository.RemoveAsync(guideEntity);
+            return new SuccessResult("Guide deleted");
+        }
+
+        public DataResult<List<GuideDto>> GetAllGuideList()
+        {
+            var guideList = guideRepository.GetAll().ToList();
+            var guideDtoList = mapper.Map<List<GuideDto>>(guideList);
+            return new SuccessDataResult<List<GuideDto>>("All guides listed", guideDtoList);
+        }
+
+        public async Task<DataResult<GuideDto>> UpdateGuide(UpdateGuideDto guide, int id)
+        {
+            var guideEntity = await guideRepository.GetByIdAsync(id);
+            if (guideEntity != null)
+            {
+                guideEntity.Email = guide.Email ?? guideEntity.Email;
+                guideEntity.CellPhone = guide.CellPhone ?? guideEntity.CellPhone;
+                guideEntity.Description = guide.Description ?? guideEntity.Description;
+                await guideRepository.Update(guideEntity);
+                var guideDto = mapper.Map<GuideDto>(guideEntity);
+                return new SuccessDataResult<GuideDto>("Guide information updated", guideDto);
+            }
+            return new ErrorDataResult<GuideDto>("Guide couldn't found", null);
+        }
+
+        public DataResult<IQueryable<Guide>> GetAllGuidesAsQueryable()
+        {
+            var guideList = guideRepository.GetAll();
+            return new SuccessDataResult<IQueryable<Guide>>("All guides listed", guideList);
+        }
+
+        public async Task<DataResult<GuideDto>> GetGuideById(int guideId)
+        {
+            var guide = await guideRepository.GetByIdAsync(guideId);
+            if (guide != null)
+            {
+                var guideDto = mapper.Map<GuideDto>(guide);
+                return new SuccessDataResult<GuideDto>("Guide listed", guideDto);
+            }
+            return new ErrorDataResult<GuideDto>("Guide couldn't found", null);
         }
     }
 }

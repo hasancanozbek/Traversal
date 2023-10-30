@@ -14,7 +14,7 @@ namespace Traversal.Web.ViewComponents.Default
 
         public IViewComponentResult Invoke()
         {
-            var commentList = commentService.GetAllCommentDtoList().Take(5).OrderByDescending(o => o.CreatedTime).ToList();
+            var commentList = commentService.GetAllCommentDtoList().Data.Take(5).OrderByDescending(o => o.CreatedTime).ToList();
             return View(commentList);
         }
     }

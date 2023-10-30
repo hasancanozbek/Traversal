@@ -16,8 +16,7 @@ namespace Traversal.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = tripService.GetAllTripList().ToList();
-            return View(model);
+            return View();
         }
 
         public IActionResult Privacy()
