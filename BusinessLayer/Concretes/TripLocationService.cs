@@ -62,16 +62,10 @@ namespace BusinessLayer.Concretes
             return new SuccessDataResult<List<TripLocation>>("All trip location information of trip listed", tripLocationList);
         }
 
-        public async Task<DataResult<LocationDto>> UpdateTripLocation(AddTripLocationDto tripLocationDto, int tripLocationId)
+        public async Task<DataResult<TripLocation>> UpdateTripLocation(TripLocation tripLocation)
         {
-            var tripLocationEntity = await triplocationRepository.GetByIdAsync(tripLocationId);
-            if (tripLocationEntity != null)
-            {
-                await triplocationRepository.Update(tripLocationEntity);
-                var mappedTrip = mapper.Map<LocationDto>(tripLocationEntity);
-                return new SuccessDataResult<LocationDto>("Trip updated", mappedTrip);
-            }
-            return new ErrorDataResult<LocationDto>("Trip couldn't update", null);
+            await triplocationRepository.Update(tripLocation);
+            return new SuccessDataResult<TripLocation>("Trip updated", tripLocation);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.Comments;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Traversal.API.Controllers
@@ -70,7 +69,7 @@ namespace Traversal.API.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPut("DeleteComment")]
+        [HttpDelete("DeleteComment")]
         public async Task<IActionResult> DeleteComment(CommentDto comment)
         {
             var result = await commentService.DeleteComment(comment);

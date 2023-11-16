@@ -8,7 +8,7 @@ namespace EntityLayer.Concretes
         public int LocationId { get; set; }
 
         //Navigation properties
-        public Trip Trip { get; set; }
-        public Location Location { get; set; }
+        public virtual Trip Trip { get; set; }
+        public virtual Location Location { get; set; }
     }
 }

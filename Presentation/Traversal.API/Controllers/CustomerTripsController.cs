@@ -1,7 +1,5 @@
 ﻿using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.CustomerTrips;
-using BusinessLayer.Dtos.Trips;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Traversal.API.Controllers
@@ -72,7 +70,7 @@ namespace Traversal.API.Controllers
             return BadRequest(result);
         }
 
-        [HttpPut("UpdateTrip")]
+        [HttpPut("UpdateCustomerTrip")]
         public async Task<IActionResult> UpdateCustomerTrip(AddCustomerTripDto customerTrip, int customerTripId)
         {
             var result = await customerTripService.UpdateCustomerTrip(customerTrip, customerTripId);

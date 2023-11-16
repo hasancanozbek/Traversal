@@ -4,7 +4,7 @@ using BusinessLayer.Dtos.Trips;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
 using EntityLayer.Concretes;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Concretes
 {
@@ -41,7 +41,7 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<TripDto>> GetAllTripList()
         {
-            var tripList = tripRepository.GetAll().ToList();
+            var tripList = tripRepository.GetAll().Include(i => i.Guide).ToList();
             var tripListDto = mapper.Map<List<TripDto>>(tripList);
             foreach (var trip in tripListDto)
             {
@@ -53,10 +53,13 @@ namespace BusinessLayer.Concretes
 
         public async Task<DataResult<TripDto>> GetTripById(int tripId)
         {
-            var trip = await tripRepository.GetByIdAsync(tripId);
+            var trip = await tripRepository.GetWhere(s => s.Id == tripId).Include(i => i.Guide).FirstOrDefaultAsync();
             var tripDto = mapper.Map<TripDto>(trip);
-            tripDto.GuideFirstName = trip.Guide.FirstName;
-            tripDto.GuideLastName = trip.Guide.LastName;
+            if (trip != null)
+            {
+                tripDto.GuideFirstName = trip.Guide.FirstName;
+                tripDto.GuideLastName = trip.Guide.LastName;
+            }
             return new SuccessDataResult<TripDto>("Trip information listed", tripDto);
         }
 

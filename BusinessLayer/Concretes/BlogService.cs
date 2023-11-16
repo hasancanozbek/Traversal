@@ -6,6 +6,7 @@ using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
 using DataAccessLayer.Concretes;
 using EntityLayer.Concretes;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Concretes
 {
@@ -36,7 +37,7 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<BlogDto>> GetAllBlogList()
         {
-            var blogList = blogRepository.GetAll().ToList();
+            var blogList = blogRepository.GetAll().Include(i => i.Customer).ToList();
             var blogListDto = mapper.Map<List<BlogDto>>(blogList);
             blogListDto.ForEach(blog => 
             {
@@ -55,7 +56,7 @@ namespace BusinessLayer.Concretes
 
         public async Task<DataResult<BlogDto>> GetBlogById(int blogId)
         {
-            var blog = await blogRepository.GetByIdAsync(blogId);
+            var blog = await blogRepository.GetWhere(s => s.Id == blogId).Include(i => i.Customer).FirstOrDefaultAsync();
             var blogDto = mapper.Map<BlogDto>(blog);
             blogDto.CustomerFirstName = blog.Customer.FirstName;
             blogDto.CustomerLastName = blog.Customer.LastName;
@@ -64,16 +65,20 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<BlogDto>> GetBlogListByCustomerId(int customerId)
         {
-            var blogList = blogRepository.GetWhere(s => s.CustomerId == customerId).ToList();
-            var customerFirstName = blogList.First().Customer.FirstName;
-            var customerLastName = blogList.First().Customer.LastName;
-            var blogListDto = mapper.Map<List<BlogDto>>(blogList);
-            blogListDto.ForEach(blog =>
+            var blogList = blogRepository.GetWhere(s => s.CustomerId == customerId).Include(i => i.Customer).ToList();
+            if (blogList.Any())
             {
-                blog.CustomerFirstName = customerFirstName;
-                blog.CustomerLastName = customerLastName;
-            });
-            return new SuccessDataResult<List<BlogDto>>(blogListDto);
+                var customerFirstName = blogList.First().Customer.FirstName;
+                var customerLastName = blogList.First().Customer.LastName;
+                var blogListDto = mapper.Map<List<BlogDto>>(blogList);
+                blogListDto.ForEach(blog =>
+                {
+                    blog.CustomerFirstName = customerFirstName;
+                    blog.CustomerLastName = customerLastName;
+                });
+                return new SuccessDataResult<List<BlogDto>>(blogListDto);
+            }
+            return new ErrorDataResult<List<BlogDto>>("No blogs belonging to the customer were found", null);
         }
 
         public async Task<DataResult<BlogDto>> UpdateBlog(UpdateBlogDto blog, int blogId)

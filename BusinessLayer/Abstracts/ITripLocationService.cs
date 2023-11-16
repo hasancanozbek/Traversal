@@ -12,7 +12,7 @@ namespace BusinessLayer.Abstracts
         Task<DataResult<TripLocation>> GetTripLocationById(int tripLocationId);
         DataResult<List<TripLocation>> GetTripLocationListByTripId(int tripId);
         DataResult<List<TripLocation>> GetTripLocationListByLocationId(int locationId);
-        Task<DataResult<LocationDto>> UpdateTripLocation(AddTripLocationDto tripLocationDto, int tripLocationId);
+        Task<DataResult<TripLocation>> UpdateTripLocation(TripLocation tripLocation);
         Task<Result> AddTripLocation(AddTripLocationDto tripLocationDto);
         Task<Result> DeleteTripLocation(TripLocation tripLocation);
     }

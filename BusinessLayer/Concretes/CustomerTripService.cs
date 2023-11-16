@@ -6,6 +6,7 @@ using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
 using DataAccessLayer.Concretes;
 using EntityLayer.Concretes;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Concretes
 {
@@ -36,7 +37,7 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<CustomerTripDto>> GetAllCustomerTripList()
         {
-            var customerTripList = customerTripRepository.GetAll().ToList();
+            var customerTripList = customerTripRepository.GetAll().Include(i => i.Customer).Include(i => i.Trip).ToList();
             var customerTripListDto = mapper.Map<List<CustomerTripDto>>(customerTripList);
             foreach (var customerTrip in customerTripListDto)
             {
@@ -56,18 +57,22 @@ namespace BusinessLayer.Concretes
 
         public async Task<DataResult<CustomerTripDto>> GetCustomerTripById(int customerTripId)
         {
-            var customerTrip = await customerTripRepository.GetByIdAsync(customerTripId);
+            var customerTrip = await customerTripRepository.GetWhere(s => s.Id == customerTripId).Include(i => i.Customer).Include(i => i.Trip).FirstOrDefaultAsync();
             var customerTripDto = mapper.Map<CustomerTripDto>(customerTrip);
-            customerTripDto.CustomerFirstName = customerTrip.Customer.FirstName;
-            customerTripDto.CustomerLastName = customerTrip.Customer.LastName;
-            customerTripDto.CustomerEmail = customerTrip.Customer.Email;
-            customerTripDto.TripName = customerTrip.Trip.Title;
-            return new SuccessDataResult<CustomerTripDto>("Trip information listed", customerTripDto);
+            if (customerTripDto != null)
+            {
+                customerTripDto.CustomerFirstName = customerTrip.Customer.FirstName;
+                customerTripDto.CustomerLastName = customerTrip.Customer.LastName;
+                customerTripDto.CustomerEmail = customerTrip.Customer.Email;
+                customerTripDto.TripName = customerTrip.Trip.Title;
+                return new SuccessDataResult<CustomerTripDto>("Customer trip information listed", customerTripDto);
+            }
+            return new ErrorDataResult<CustomerTripDto>("Customer trip information couldn't found", null);
         }
 
         public DataResult<List<CustomerTripDto>> GetCustomerTripListByCustomerId(int customerId)
         {
-            var customerTrips = customerTripRepository.GetWhere(s => s.CustomerId == customerId).ToList();
+            var customerTrips = customerTripRepository.GetWhere(s => s.CustomerId == customerId).Include(i => i.Customer).Include(i => i.Trip).ToList();
             var customerTripsDto = mapper.Map<List<CustomerTripDto>>(customerTrips);
             customerTripsDto.ForEach(customerTrip =>
             {
@@ -82,7 +87,7 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<CustomerTripDto>> GetCustomerTripListByTripId(int tripId)
         {
-            var customerTrips = customerTripRepository.GetWhere(s => s.TripId == tripId).ToList();
+            var customerTrips = customerTripRepository.GetWhere(s => s.TripId == tripId).Include(i => i.Customer).Include(i => i.Trip).ToList();
             var customerTripsDto = mapper.Map<List<CustomerTripDto>>(customerTrips);
             customerTripsDto.ForEach(customerTrip =>
             {
@@ -106,7 +111,7 @@ namespace BusinessLayer.Concretes
                 var mappedCustomerTrip = mapper.Map<CustomerTripDto>(customerTripEntity);
                 return new SuccessDataResult<CustomerTripDto>("Customer trip updated", mappedCustomerTrip);
             }
-            return new ErrorDataResult<CustomerTripDto>("Customer trşp couldn't update", null);
+            return new ErrorDataResult<CustomerTripDto>("Customer trip couldn't update", null);
         }
     }
 }

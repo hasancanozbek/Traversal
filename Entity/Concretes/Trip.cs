@@ -14,7 +14,7 @@ namespace EntityLayer.Concretes
         public List<string> ImageList { get; set; }
 
         //Navigation Properties
-        public Guide Guide { get; set; }
-        public List<Comment> Comments { get; set; }
+        public virtual Guide Guide { get; set; }
+        public virtual List<Comment> Comments { get; set; }
     }
 }

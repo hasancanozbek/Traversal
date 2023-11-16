@@ -9,6 +9,5 @@ namespace EntityLayer.Concretes
 
         //Navigation Properties
         public List<City> CityList { get; set; }
-        public List<Location> LocationList { get; set; }
     }
 }

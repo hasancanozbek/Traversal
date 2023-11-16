@@ -10,7 +10,7 @@ namespace EntityLayer.Concretes
         public DateTime? BirthDate { get; set; }
 
         //Navigation Properties
-        public List<Blog> BlogList { get; set; }
-        public List<Comment> Comments { get; set; }
+        public virtual List<Blog> BlogList { get; set; }
+        public virtual List<Comment> Comments { get; set; }
     }
 }

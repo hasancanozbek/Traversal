@@ -9,7 +9,7 @@ namespace EntityLayer.Concretes
         public int Code { get; set; }
 
         //Navigation Properties
-        public Country Country { get; set; }
-        public List<Location> LocationList { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual List<Location> LocationList { get; set; }
     }
 }

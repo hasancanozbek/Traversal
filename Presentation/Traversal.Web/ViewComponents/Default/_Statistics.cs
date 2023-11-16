@@ -22,7 +22,7 @@ namespace Traversal.Web.ViewComponents.Default
 
             ViewBag.TotalCustomer = customerService.GetAllCustomerList().Data.Count();
             ViewBag.TotalTrip = tripService.GetAllTripList().Data.Count();
-            ViewBag.TotalLocation = locationService.GetAllLocationList().Count();
+            ViewBag.TotalLocation = locationService.GetAllLocationList().Data.Count();
             ViewBag.TotalGuide = guideService.GetAllGuideList().Data.Count();
             return View();
         }

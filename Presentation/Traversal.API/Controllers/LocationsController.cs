@@ -38,9 +38,9 @@ namespace Traversal.API.Controllers
         }
 
         [HttpGet("GetLocationListByCityId")]
-        public async Task<IActionResult> GetLocationListByCityId(int cityId)
+        public IActionResult GetLocationListByCityId(int cityId)
         {
-            var result = await locationService.GetLocationListByCityId(cityId);
+            var result = locationService.GetLocationListByCityId(cityId);
             if (result.IsSuccess)
             {
                 return Ok(result);

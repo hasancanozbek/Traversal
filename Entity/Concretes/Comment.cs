@@ -10,7 +10,7 @@ namespace EntityLayer.Concretes
         public int Star { get; set; }
 
         //Navigation Properties
-        public Customer Customer { get; set; }
-        public Trip Trip { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Trip Trip { get; set; }
     }
 }

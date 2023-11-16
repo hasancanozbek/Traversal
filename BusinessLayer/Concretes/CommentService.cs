@@ -56,6 +56,7 @@ namespace BusinessLayer.Concretes
                         comment.CustomerLastName = customerInfos.LastName;
                         comment.CustomerEmail = customerInfos.Email;
                         comment.TripName = tripInfos.Title;
+                        comment.TripDate = tripInfos.PlannedDate;
                     }
                 }
                 return new SuccessDataResult<List<CommentDto>>(commentDtoList);
@@ -75,7 +76,7 @@ namespace BusinessLayer.Concretes
 
         public async Task<DataResult<CommentDto>> GetCommentDtoById(int id)
         {
-            var comment = await mapper.Map<Task<CommentDto>>(commentRepository.GetByIdAsync(id));
+            var comment = mapper.Map<CommentDto>(await commentRepository.GetByIdAsync(id));
             var trip = await tripService.GetTripById(comment.TripId);
             var customer = await customerService.GetCustomerById(comment.CustomerId);
             comment.CustomerEmail = customer.Data.Email;

@@ -10,6 +10,6 @@ namespace EntityLayer.Concretes
         public int CustomerId { get; set; }
 
         //Navigation Properties
-        public Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

@@ -72,9 +72,9 @@ namespace Traversal.API.Controllers
         }
 
         [HttpPut("UpdateTripLocation")]
-        public async Task<IActionResult> UpdateTripLocation(AddTripLocationDto tripLocation, int tripLocationId)
+        public async Task<IActionResult> UpdateTripLocation(TripLocation tripLocation)
         {
-            var result = await tripLocationService.UpdateTripLocation(tripLocation, tripLocationId);
+            var result = await tripLocationService.UpdateTripLocation(tripLocation);
             if (result.IsSuccess)
             {
                 return Ok(result);

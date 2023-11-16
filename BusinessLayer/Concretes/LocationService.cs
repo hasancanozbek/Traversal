@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.Locations;
-using BusinessLayer.Dtos.Trips;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
-using DataAccessLayer.Concretes;
 using EntityLayer.Concretes;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLayer.Concretes
 {
@@ -42,13 +41,14 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<LocationDto>> GetLocationListByCityId(int cityId)
         {
-            var locationList = locationRepository.GetWhere(s => s.CityId == cityId).ToList();
+            var locationList = locationRepository.GetWhere(s => s.CityId == cityId).Include(i => i.City.Country).ToList();
             var locationListDto = mapper.Map<List<LocationDto>>(locationList);
             locationListDto.ForEach(locationDto =>
             {
                 var location = locationList.First(s => s.Id == locationDto.Id);
                 locationDto.CityName = location.City.Name;
-                locationDto.CountryName = location.Country.Name;
+                locationDto.CountryName = location.City.Country.Name;
+                locationDto.CountryId = location.City.Country.Id;
             });
             return new SuccessDataResult<List<LocationDto>>("Locations of the city listed", locationListDto);
         }
@@ -70,24 +70,30 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<LocationDto>> GetAllLocationList()
         {
-            var locationList = locationRepository.GetAll().ToList();
+            var locationList = locationRepository.GetAll().Include(i => i.City.Country).ToList();
             var locationListDto = mapper.Map<List<LocationDto>>(locationList);
             foreach (var location in locationListDto)
             {
                 var tmpLocationEntity = locationList.First(s => s.Id == location.Id);
                 location.CityName = tmpLocationEntity.City.Name;
-                location.CountryName = tmpLocationEntity.Country.Name;
+                location.CountryName = tmpLocationEntity.City.Country.Name;
+                location.CountryId = tmpLocationEntity.City.Country.Id;
             }
             return new SuccessDataResult<List<LocationDto>>("All locations listed", locationListDto);
         }
 
         public async Task<DataResult<LocationDto>> GetLocationById(int locationId)
         {
-            var location = await locationRepository.GetByIdAsync(locationId);
+            var location = await locationRepository.GetWhere(s => s.Id == locationId).Include(i => i.City.Country).FirstOrDefaultAsync();
             var locationDto = mapper.Map<LocationDto>(location);
-            locationDto.CityName = location.City.Name;
-            locationDto.CountryName = location.Country.Name;
-            return new SuccessDataResult<LocationDto>("Location information listed", locationDto);
+            if (locationDto != null)
+            {
+                locationDto.CityName = location.City.Name;
+                locationDto.CountryName = location.City.Country.Name;
+                locationDto.CountryId = location.City.Country.Id;
+                return new SuccessDataResult<LocationDto>("Location information listed", locationDto);
+            }
+            return new ErrorDataResult<LocationDto>("Location couldn't listed", null);
         }
     }
 }

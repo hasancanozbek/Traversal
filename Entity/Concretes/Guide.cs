@@ -12,6 +12,6 @@ namespace EntityLayer.Concretes
         public string  Description { get; set; }
 
         //Navigation Properties
-        public List<Trip> TripList { get; set; }
+        public virtual List<Trip> TripList { get; set; }
     }
 }
