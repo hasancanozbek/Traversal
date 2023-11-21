@@ -14,12 +14,12 @@ namespace Traversal.Web.ViewComponents.Default
 
         public IViewComponentResult Invoke()
         {
-            var destinationList = tripService.GetAllTripsAsQueryable();
+            var destinationList = tripService.GetAllTripList();
             if (destinationList.IsSuccess)
             {
                 destinationList.Data.Take(6).OrderByDescending(o => o.CreatedTime).ToList();
             }
-            return View(destinationList);
+            return View(destinationList.Data);
         }
     }
 }

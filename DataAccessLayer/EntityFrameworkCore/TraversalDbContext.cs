@@ -19,7 +19,9 @@ namespace DataAccessLayer.EntityFrameworkCore
         public DbSet<City> Cities { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<TripLocation> TripLocations { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<TripComment> TripComments { get; set; }
+        public DbSet<TripDate> TripDates { get; set; }
+        public DbSet<BlogComment> BlogComments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

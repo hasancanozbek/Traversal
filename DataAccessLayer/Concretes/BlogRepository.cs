@@ -1,5 +1,4 @@
-﻿
-using DataAccessLayer.Abstracts;
+﻿using DataAccessLayer.Abstracts;
 using DataAccessLayer.EntityFrameworkCore;
 using EntityLayer.Concretes;
 

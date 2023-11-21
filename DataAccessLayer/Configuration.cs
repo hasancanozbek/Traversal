@@ -8,7 +8,7 @@ static class Configuration
             ConfigurationManager configurationManager = new();
             try
             {
-                configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Traversal.Web"));
+                configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Traversal.API"));
                 configurationManager.AddJsonFile("appsettings.json");
             }
             catch

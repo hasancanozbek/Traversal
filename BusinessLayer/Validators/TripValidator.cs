@@ -8,9 +8,7 @@ namespace BusinessLayer.Validators
         public TripValidator()
         {
             RuleFor(x => x.Price).GreaterThan(0).NotEmpty().NotNull();
-            RuleFor(x => x.PlannedDate).GreaterThan(DateTime.Now).NotEmpty().NotNull();
             RuleFor(x => x.Title).MinimumLength(5).NotEmpty().NotNull();
-            RuleFor(x => x.Quota).GreaterThanOrEqualTo(0).NotEmpty().NotNull();
             RuleFor(x => x.Day).GreaterThanOrEqualTo(0).NotEmpty().NotNull();
         }
     }

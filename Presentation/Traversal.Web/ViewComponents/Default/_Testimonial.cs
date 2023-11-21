@@ -5,17 +5,22 @@ namespace Traversal.Web.ViewComponents.Default
 {
     public class _Testimonial : ViewComponent
     {
-        private readonly ICommentService commentService;
+        private readonly ITripCommentService commentService;
 
-        public _Testimonial(ICommentService commentService)
+        public _Testimonial(ITripCommentService commentService)
         {
             this.commentService = commentService;
         }
 
         public IViewComponentResult Invoke()
         {
-            var commentList = commentService.GetAllCommentDtoList().Data.Take(5).OrderByDescending(o => o.CreatedTime).ToList();
-            return View(commentList);
+            var result = commentService.GetAllCommentList();
+            if (result.IsSuccess)
+            {
+                var commentList = result.Data.Take(5).OrderByDescending(o => o.CreatedTime).ToList();
+                return View(commentList);
+            }
+            return View();
         }
     }
 }

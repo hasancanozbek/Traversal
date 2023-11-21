@@ -17,9 +17,9 @@ namespace BusinessLayer.Dtos
     {
         public MappingProfiles() 
         {
-            CreateMap<Comment, CommentDto>().ReverseMap();
-            CreateMap<Comment, AddCommentDto>().ReverseMap();
-            CreateMap<Comment, UpdateCommentDto>().ReverseMap();
+            CreateMap<TripComment, TripCommentDto>().ReverseMap();
+            CreateMap<TripComment, AddTripCommentDto>().ReverseMap();
+            CreateMap<TripComment, UpdateTripCommentDto>().ReverseMap();
 
             CreateMap<Customer, CustomerDto>().ReverseMap();
             CreateMap<Customer, AddCustomerDto>().ReverseMap();

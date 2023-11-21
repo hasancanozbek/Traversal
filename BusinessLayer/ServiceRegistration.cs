@@ -22,6 +22,8 @@ public static class ServiceRegistration
         services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<ICustomerTripService, CustomerTripService>();
         services.AddScoped<ITripLocationService, TripLocationService>();
-        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ITripCommentService, TripCommentService>();
+        services.AddScoped<IBlogCommentService, BlogCommentService>();
+        services.AddScoped<ITripDateService, TripDateService>();
     }
 }

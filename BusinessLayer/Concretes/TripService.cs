@@ -69,9 +69,8 @@ namespace BusinessLayer.Concretes
             if (tripEntity != null)
             {
                 tripEntity.Title = trip.Title ?? tripEntity.Title;
-                tripEntity.Description = trip.Description ?? tripEntity.Description;
+                tripEntity.Content = trip.Content ?? tripEntity.Content;
                 tripEntity.Price = trip.Price == 0 ? tripEntity.Price : trip.Price;
-                tripEntity.Quota = trip.Quota == 0 ? tripEntity.Quota : trip.Quota;
                 tripEntity.Day = trip.Day == 0 ? tripEntity.Day : trip.Day;
                 tripEntity.GuideId = trip.GuideId == 0 ? tripEntity.GuideId : trip.GuideId;
                 await tripRepository.Update(tripEntity);
