@@ -15,5 +15,6 @@ namespace EntityLayer.Concretes
         public virtual Guide Guide { get; set; }
         public virtual List<TripComment> TripComments { get; set; }
         public virtual List<TripDate> TripDates { get; set;}
+        public virtual List<TripKey> TripKeys { get; set;}
     }
 }

@@ -22,6 +22,8 @@ namespace DataAccessLayer.EntityFrameworkCore
         public DbSet<TripComment> TripComments { get; set; }
         public DbSet<TripDate> TripDates { get; set; }
         public DbSet<BlogComment> BlogComments { get; set; }
+        public DbSet<TripKey> TripKeys { get; set; }
+        public DbSet<BlogKey> BlogKeys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
