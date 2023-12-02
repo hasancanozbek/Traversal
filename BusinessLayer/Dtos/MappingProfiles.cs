@@ -17,7 +17,13 @@ namespace BusinessLayer.Dtos
     {
         public MappingProfiles() 
         {
-            CreateMap<TripComment, TripCommentDto>().ReverseMap();
+            CreateMap<TripComment, TripCommentDto>()
+            .ForMember(dest => dest.CustomerFirstName, opt => opt.MapFrom(src => src.Customer.FirstName))
+            .ForMember(dest => dest.CustomerLastName, opt => opt.MapFrom(src => src.Customer.LastName))
+            .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.Customer.Email))
+            .ForMember(dest => dest.TripName, opt => opt.MapFrom(src => src.TripDate.Trip.Title))
+            .ForMember(dest => dest.TripDate, opt => opt.MapFrom(src => src.TripDate.Date))
+            .ReverseMap();
             CreateMap<TripComment, AddTripCommentDto>().ReverseMap();
             CreateMap<TripComment, UpdateTripCommentDto>().ReverseMap();
 

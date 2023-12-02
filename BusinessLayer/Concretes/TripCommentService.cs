@@ -47,16 +47,6 @@ namespace BusinessLayer.Concretes
                 {
                     var commentList = result.Data.Include(i => i.Customer).Include(i => i.TripDate.Trip).ToList();
                     var commentDtoList = mapper.Map<List<TripCommentDto>>(commentList);
-                    commentDtoList.ForEach(commentDto =>
-                    {
-                        var comment = commentList.First(s => s.Id == commentDto.Id);
-                        commentDto.CustomerFirstName = comment.Customer.FirstName;
-                        commentDto.CustomerLastName = comment.Customer.LastName;
-                        commentDto.CustomerEmail = comment.Customer.Email;
-                        commentDto.TripName = comment.TripDate.Trip.Title;
-                        commentDto.TripDate = comment.TripDate.Date;
-
-                    });
                     return new SuccessDataResult<List<TripCommentDto>>(commentDtoList);
                 }
                 return new ErrorDataResult<List<TripCommentDto>>(null);

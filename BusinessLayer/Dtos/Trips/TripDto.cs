@@ -9,9 +9,7 @@
         public int GuideId { get; set; }
         public string GuideFirstName { get; set; }
         public string GuideLastName { get; set; }
-        public int Quota { get; set; }
         public int Day { get; set; }
-        public DateTime PlannedDate { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }

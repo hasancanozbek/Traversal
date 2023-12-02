@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(TraversalDbContext))]
-    [Migration("20231120204942_tripDate_added")]
-    partial class tripDate_added
+    [Migration("20231124182233_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,7 +99,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("BlogComment");
+                    b.ToTable("BlogComments");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.City", b =>
@@ -330,15 +330,15 @@ namespace DataAccessLayer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Day")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("GuideId")
                         .HasColumnType("integer");
@@ -408,7 +408,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("TripComments");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.TripDate", b =>
@@ -441,7 +441,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("TripDate");
+                    b.ToTable("TripDates");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.TripLocation", b =>
