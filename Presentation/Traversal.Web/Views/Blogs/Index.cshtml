@@ -29,40 +29,39 @@
             <div class="container py-lg-4 py-md-3 mb-md-0 mb-5">
                 <h3 class="hny-title mb-5">Hem Çok Gezin Hem Çok Okuyun</h3>
                 <div class="owl-testimonial owl-carousel owl-theme">
-
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <a href="~/Traversal-Liberty/blog-single.html">
-                                    <img class="card-img-bottom d-block radius-image" src="~/Traversal-Liberty/assets/images/banner1.jpg"
-                                         alt="Card image cap">
-                                </a>
-                            </div>
-                            <div class="col-lg-6 blog-details align-self mt-lg-0 mt-4">
-                                <a href="~/Traversal-Liberty/blog-single.html" class="blog-desc-big">
-                                    Travel To Make Memories All Around The World.
-                                </a>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos blanditiis, odit non
-                                    asperiores
-                                    possimus voluptas sit nihil nam id explicabo saepe sapiente excepturi similique, dicta
-                                    officia odio natus nemo. Ratione ipsa distinctio explicabo esse quod autem
-                                    veritatis, in fugit odio.
-                                </p>
-                                <div class="author align-items-center mt-4 mb-1">
-                                    <a href="~/Traversal-Liberty/author.html">Johnson smith</a> in <a href="#url">Traversal</a>
+                    @foreach (var sliderItem in Model.OrderByDescending(o => o.CreatedTime).Take(5))
+                    {
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a href="/Blogs/BlogDetail/@sliderItem.Id">
+                                        <img class="card-img-bottom d-block radius-image" src="~/Traversal-Liberty/assets/images/banner1.jpg"
+                                             alt="Card image cap">
+                                    </a>
                                 </div>
-                                <ul class="blog-meta">
-                                    <li class="meta-item blog-lesson">
-                                        <span class="meta-value"> June 13, 2020 </span>
-                                    </li>
-                                    <li class="meta-item blog-students">
-                                        <span class="meta-value"> 6 dk okuma</span>
-                                    </li>
-                                </ul>
+                                <div class="col-lg-6 blog-details align-self mt-lg-0 mt-4">
+                                    <a href="/Blogs/BlogDetail/@sliderItem.Id" class="blog-desc-big">
+                                        @sliderItem.Title
+                                    </a>
+                                    <p>
+                                        @{
+                                            int firstDotIndex = sliderItem.Content.IndexOf('.');
+                                            string firstLine = firstDotIndex == -1 ? sliderItem.Content : sliderItem.Content.Substring(0, firstDotIndex);
+                                        }
+                                        @firstLine
+                                    </p>
+                                    <div class="author align-items-center mt-4 mb-1">
+                                        <a href="#">@sliderItem.CustomerFirstName @sliderItem.CustomerLastName</a> in <a href="/home/index">Traversal</a>
+                                    </div>
+                                    <ul class="blog-meta">
+                                        <li class="meta-item blog-lesson">
+                                            <span class="meta-value">@sliderItem.CreatedTime.ToShortDateString()</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    } 
                 </div>
             </div>
         </div>
@@ -73,36 +72,39 @@
     <section class="w3l-blog-block2 mt-md-5 pb-5">
         <div class="container mb-lg-4">
             <div class="row">
-                <div class="col-lg-4 col-md-6 item mt-md-0 mt-5">
-                    <div class="card">
-                        <div class="card-header p-0 position-relative">
-                            <a href="blog-single.html">
-                                <img class="card-img-bottom d-block radius-image" src="~/Traversal-Liberty/assets/images/g2.jpg"
-                                     alt="Card image cap">
-                            </a>
-                        </div>
-                        <div class="card-body p-0 blog-details">
-                            <a href="blog-single.html" class="blog-desc">
-                                Travel To Make Memories All Around The World.
-                            </a>
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur ipsum adipisicing elit. Qui eligendi
-                                vitae sit.
-                            </p>
-                            <div class="author align-items-center mt-3 mb-1">
-                                <a href="author.html">Johnson smith</a> in <a href="#url">Traversal</a>
+                @foreach (var blog in Model)
+                {
+                    <div class="col-lg-4 col-md-6 item mt-md-0 mt-5">
+                        <div class="card">
+                            <div class="card-header p-0 position-relative">
+                                <a href="/Blogs/BlogDetail/@blog.Id">
+                                    <img class="card-img-bottom d-block radius-image" src="~/Traversal-Liberty/assets/images/g2.jpg"
+                                         alt="Card image cap">
+                                </a>
                             </div>
-                            <ul class="blog-meta">
-                                <li class="meta-item blog-lesson">
-                                    <span class="meta-value"> June 13, 2020 </span>
-                                </li>
-                                <li class="meta-item blog-students">
-                                    <span class="meta-value"> 6min read</span>
-                                </li>
-                            </ul>
+                            <div class="card-body p-0 blog-details">
+                                <a href="/Blogs/BlogDetail/@blog.Id" class="blog-desc">
+                                    @blog.Title
+                                </a>
+                                <p>
+                                    @{
+                                        int firstDotIndex = blog.Content.IndexOf('.');
+                                        string firstLine = firstDotIndex == -1 ? blog.Content : blog.Content.Substring(0, firstDotIndex);    
+                                    }
+                                    @firstLine
+                                </p>
+                                <div class="author align-items-center mt-3 mb-1">
+                                    <a href="#">@blog.CustomerFirstName @blog.CustomerLastName</a> in <a href="/home/index">Traversal</a>
+                                </div>
+                                <ul class="blog-meta">
+                                    <li class="meta-item blog-lesson">
+                                        <span class="meta-value">@blog.CreatedTime.ToShortDateString()</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
             <!-- pagination -->
             <div class="pagination-wrapper mt-5">

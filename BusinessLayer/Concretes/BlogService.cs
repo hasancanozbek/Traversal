@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.Blogs;
-using BusinessLayer.Dtos.Trips;
+using Core.Enums;
+using Core.Utilities.Cloud;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
-using DataAccessLayer.Concretes;
 using EntityLayer.Concretes;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,18 +13,36 @@ namespace BusinessLayer.Concretes
     public class BlogService : IBlogService
     {
         private readonly IBlogRepository blogRepository;
+        private readonly IBlogKeyRepository blogKeyRepository;
+        private readonly ICloudRepo cloudRepo;
         private readonly IMapper mapper;
 
-        public BlogService(IBlogRepository blogRepository, IMapper mapper)
+        public BlogService(IBlogRepository blogRepository, IMapper mapper, IBlogKeyRepository blogKeyRepository, ICloudRepo cloudRepo)
         {
             this.blogRepository = blogRepository;
             this.mapper = mapper;
+            this.blogKeyRepository = blogKeyRepository;
+            this.cloudRepo = cloudRepo;
         }
 
         public async Task<Result> AddBlog(AddBlogDto blog)
         {
             var blogEntity = mapper.Map<Blog>(blog);
-            await blogRepository.AddAsync(blogEntity);
+            var entityId = await blogRepository.AddAsync(blogEntity);
+            foreach (var image in blog.ImageList)
+            {
+                var fileAssetId = await cloudRepo.UploadFileAsync(@image, FileTypesEnum.Image);
+                if (!fileAssetId.Equals(string.Empty))
+                {
+                    var keyValuePair = new BlogKey()
+                    {
+                        BlogId = entityId,
+                        Key = BlogKeysEnum.image.ToString(),
+                        Value = fileAssetId
+                    };
+                    await blogKeyRepository.AddAsync(keyValuePair);
+                }
+            }
             return new SuccessResult("Blog added");
         }
 
@@ -32,18 +50,27 @@ namespace BusinessLayer.Concretes
         {
             var blogEntity = mapper.Map<Blog>(blog);
             await blogRepository.RemoveAsync(blogEntity);
-            return new SuccessResult("blog deleted");
+            var imageList = blogKeyRepository.GetWhere(s => s.BlogId == blog.Id).ToList();
+            await blogKeyRepository.RemoveRange(imageList);
+            return new SuccessResult("Blog deleted");
         }
 
         public DataResult<List<BlogDto>> GetAllBlogList()
         {
             var blogList = blogRepository.GetAll().Include(i => i.Customer).ToList();
             var blogListDto = mapper.Map<List<BlogDto>>(blogList);
-            blogListDto.ForEach(blog => 
+            blogListDto.ForEach(blog =>
             {
                 var tmpBlog = blogList.First(s => s.Id == blog.Id);
                 blog.CustomerFirstName = tmpBlog.Customer.FirstName;
                 blog.CustomerLastName = tmpBlog.Customer.LastName;
+                blog.ImageList = new List<string>();
+                var imageKeys = blogKeyRepository.GetWhere(s => s.BlogId == blog.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
+                foreach (var image in imageKeys)
+                {
+                    var url = cloudRepo.GetFileUrl(image);
+                    blog.ImageList.Add(url);
+                }
             });
             return new SuccessDataResult<List<BlogDto>>(blogListDto);
         }
@@ -60,6 +87,13 @@ namespace BusinessLayer.Concretes
             var blogDto = mapper.Map<BlogDto>(blog);
             blogDto.CustomerFirstName = blog.Customer.FirstName;
             blogDto.CustomerLastName = blog.Customer.LastName;
+            blogDto.ImageList = new List<string>();
+            var imageKeys = blogKeyRepository.GetWhere(s => s.BlogId == blogId && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
+            foreach (var image in imageKeys)
+            {
+                var url = await cloudRepo.GetFileUrlAsync(image);
+                blogDto.ImageList.Add(url);
+            }
             return new SuccessDataResult<BlogDto>("Blog information listed", blogDto);
         }
 
@@ -75,6 +109,13 @@ namespace BusinessLayer.Concretes
                 {
                     blog.CustomerFirstName = customerFirstName;
                     blog.CustomerLastName = customerLastName;
+                    blog.ImageList = new List<string>();
+                    var imageKeys = blogKeyRepository.GetWhere(s => s.BlogId == blog.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
+                    foreach (var image in imageKeys)
+                    {
+                        var url = cloudRepo.GetFileUrl(image);
+                        blog.ImageList.Add(url);
+                    }
                 });
                 return new SuccessDataResult<List<BlogDto>>(blogListDto);
             }
@@ -88,7 +129,6 @@ namespace BusinessLayer.Concretes
             {
                 blogEntity.Title = blog.Title ?? blogEntity.Title;
                 blogEntity.Content = blog.Content ?? blogEntity.Content;
-                blogEntity.ImageList = blog.ImageList ?? blogEntity.ImageList;
                 await blogRepository.Update(blogEntity);
                 var mappedBlog = mapper.Map<BlogDto>(blogEntity);
                 return new SuccessDataResult<BlogDto>("Blog updated", mappedBlog);

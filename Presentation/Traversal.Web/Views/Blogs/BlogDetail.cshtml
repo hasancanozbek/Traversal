@@ -1,0 +1,168 @@
+﻿@using BusinessLayer.Dtos.Blogs
+
+@{
+    ViewData["Title"] = "BlogDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model BlogDto
+
+<!doctype html>
+<html lang="zxx">
+<body>
+    <!-- about breadcrumb -->
+    <section class="w3l-about-breadcrumb text-left">
+        <div class="breadcrumb-bg breadcrumb-bg-about py-sm-5 py-4">
+            <div class="container">
+                <h2 class="title">Blog Sayfası</h2>
+                <ul class="breadcrumbs-custom-path mt-2">
+                    <li><a href="#url">Anasayfa</a></li>
+                    <li class="active"><span class="fa fa-arrow-right mx-2" aria-hidden="true"></span>Blog Listesi</li>
+                    <li class="active"><span class="fa fa-arrow-right mx-2" aria-hidden="true"></span>Blog</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- //about breadcrumb -->
+    <!--/blog-->
+    <div class="py-5 w3l-homeblock1 text-center">
+        <div class="container mt-md-3">
+            <h3 class="blog-desc-big text-center mb-4">
+                @Model.Title
+            </h3>
+            <div class="blog-post-align">
+                <div class="blog-post-img">
+                    <a href="#"><img src="~/Traversal-Liberty/assets/images/c1.jpg" alt="" class="rounded-circle img-fluid" /></a>
+                </div>
+                <div class="blog-post-info">
+                    <div class="author align-items-center mb-1">
+                        <a href="#">@Model.CustomerFirstName @Model.CustomerLastName</a> in <a href="/home/index">Traversal</a>
+                    </div>
+                    <ul class="blog-meta">
+                        <li class="meta-item blog-lesson">
+                            <span class="meta-value">@Model.CreatedTime.ToShortDateString()</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="blog-post-main w3l-homeblock1">
+        <!--/blog-post-->
+        <div class="blog-content-inf pb-5">
+            <div class="container pb-lg-4">
+                <div class="single-post-image">
+                    <div class="post-content">
+                        <img src=@Model.ImageList.FirstOrDefault() class="radius-image img-fluid mb-5" alt="" />
+                    </div>
+                </div>
+                <div class="single-post-content">
+                    <p class="alphabet mb-4">
+                        <span class="big-letter">@Model.Content.FirstOrDefault()</span>
+                        @Html.Raw(Model.Content)
+                    </p>
+
+                    @* Todo: İlgili tura ait yorumları çeken servise istek atılacak ve yorumlar ekrana basılacak. Statik olan kısımlar güncellenecek. *@
+                    <div class="comments mt-5">
+                        <h4 class="side-title ">Yorumlar (2)</h4>
+                        <div class="media mt-4">
+                            <div class="img-circle">
+                                <img src="~/Traversal-Liberty/assets/images/c1.jpg" class="img-fluid" alt="...">
+                            </div>
+                            <div class="media-body">
+
+                                <ul class="time-rply mb-2">
+                                    <li>
+                                        <a href="#URL" class="name mt-0 mb-2 d-block">William Jack</a>
+                                        June 15th, 2020 - 10:02 pm
+
+                                    </li>
+                                    <li class="reply-last">
+                                        <a href="#reply" class="reply">
+                                            Reply
+                                        </a>
+                                    </li>
+                                </ul>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat, hic
+                                    reprehenderit eum cupiditate deleniti, Lorem ipsum dolor sit amet consectetur adipisicing.....
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="media">
+                            <div class="img-circle">
+                                <img src="~/Traversal-Liberty/assets/images/c2.jpg" class="img-fluid" alt="...">
+                            </div>
+                            <div class="media-body">
+                                <ul class="time-rply mb-2">
+                                    <li>
+                                        <a href="#URL" class="name mt-0 mb-2 d-block">James Harper</a>
+                                        June 15th, 2020 - 12:30 pm
+
+                                    </li>
+                                    <li class="reply-last">
+                                        <a href="#reply" class="reply">
+                                            Reply
+                                        </a>
+                                    </li>
+                                </ul>
+                                <p>
+                                    Lorem ipsum dolor, sit amet consectetur adipisicing. Ea consequuntur illum facere aperiam sequi optio consectetur adipisicing elitFuga,
+                                    suscipit totam animi.....
+                                </p>
+                                <div class="media second mt-4 p-0 pt-2">
+                                    <a class="img-circle img-circle-sm" href="#url">
+                                        <img src="~/Traversal-Liberty/assets/images/c3.jpg" class="img-fluid" alt="...">
+                                    </a>
+                                    <div class="media-body">
+                                        <ul class="time-rply mb-2">
+                                            <li>
+                                                <a href="#URL" class="name mt-0 mb-2 d-block">Jackson Wyatt</a>
+                                                June 15th, 2020 - 14:20 pm
+
+                                            </li>
+                                            <li class="reply-last">
+                                                <a href="#reply" class="reply"> Reply</a>
+                                            </li>
+                                        </ul>
+                                        <p>
+                                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                                            corrupti quos dolores et. Lorem ipsum dolor sit amet......
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="leave-comment-form mt-5" id="reply">
+                        <h4 class="side-title mb-2">Bu bloga bir yorum ekleyin</h4>
+                        <form action="#" method="post">
+
+                            <div class="form-group">
+                                <textarea name="Comment" class="form-control" placeholder="Yorumunuz*" required=""
+                                          spellcheck="false"></textarea>
+                            </div>
+                            <div class="input-grids row">
+
+                                <div class="form-group col-lg-6">
+                                    <input type="text" name="Name" class="form-control" placeholder="İsim Soyisim*"
+                                           required="">
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <input type="email" name="Email" class="form-control" placeholder="Email*" required="">
+                                </div>
+                            </div>
+
+                            <div class="submit text-right">
+                                <button class="btn btn-style btn-primary">Yorumu Paylaş</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--//blog-post-->
+    </section>
+</body>
+
+</html>

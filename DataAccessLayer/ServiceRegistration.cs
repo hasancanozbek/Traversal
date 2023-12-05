@@ -21,6 +21,8 @@ public static class ServiceRegistration
         services.AddScoped<ITripCommentRepository, TripCommentRepository>();
         services.AddScoped<IBlogCommentRepository, BlogCommentRepository>();
         services.AddScoped<ITripDateRepository, TripDateRepository>();
+        services.AddScoped<IBlogKeyRepository, BlogKeyRepository>();
+        services.AddScoped<ITripKeyRepository, TripKeyRepository>();
     }
 }
 

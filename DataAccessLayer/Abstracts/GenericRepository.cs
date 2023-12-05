@@ -55,11 +55,11 @@ namespace DataAccessLayer.Abstracts
             }
             return await query.FirstOrDefaultAsync(method);
         }
-        public async Task<bool> AddAsync(T entity)
+        public async Task<int> AddAsync(T entity)
         {
             EntityEntry<T> entityEntry = await Table.AddAsync(entity);
             await SaveAsync();
-            return entityEntry.State == EntityState.Added;
+            return entityEntry.Entity.Id;
         }
 
         public async Task<bool> AddRangeAsync(List<T> entities)

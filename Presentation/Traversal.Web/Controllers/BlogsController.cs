@@ -1,7 +1,5 @@
 ﻿using BusinessLayer.Abstracts;
-using BusinessLayer.Concretes;
 using BusinessLayer.Dtos.Blogs;
-using BusinessLayer.Dtos.Trips;
 using Core.Utilities.Cloud;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +18,6 @@ namespace Traversal.Web.Controllers
 
         public IActionResult Index()
         {
-            cloudRepo.UploadFileAsync("https://www.seiu1000.org/sites/main/files/main-images/camera_lense_0.jpeg", Core.Enums.FileTypesEnum.Image);
             var result = blogService.GetAllBlogList();
             if (result.IsSuccess)
             {
@@ -41,7 +38,7 @@ namespace Traversal.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult TripDetail(AddBlogDto blogDto)
+        public IActionResult BlogDetail(AddBlogDto blogDto)
         {
             return View();
         }

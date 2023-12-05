@@ -1,7 +1,6 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Core.Enums;
-using Microsoft.AspNetCore.Http;
 
 namespace Core.Utilities.Cloud
 {
@@ -21,18 +20,46 @@ namespace Core.Utilities.Cloud
 
         public bool DeleteFile(string url, FileTypesEnum type)
         {
-            throw new NotImplementedException();
+            if (type == FileTypesEnum.Image)
+            {
+                var deleteParams = new DelResParams()
+                {
+                    PublicIds = new List<string> { "00000000-0000-0000-0000-000000000000" },
+                    Type = "upload",
+                    ResourceType = ResourceType.Image
+                };
+                var result = cloudinary.DeleteResources(deleteParams);
+                if (result.Deleted.Count() != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public async Task<bool> DeleteFileAsync(string url, FileTypesEnum type)
         {
-            throw new NotImplementedException();
+            if (type == FileTypesEnum.Image)
+            {
+                var deleteParams = new DelResParams()
+                {
+                    PublicIds = new List<string> { "00000000-0000-0000-0000-000000000000" },
+                    Type = "upload",
+                    ResourceType = ResourceType.Image
+                };
+                var result = await cloudinary.DeleteResourcesAsync(deleteParams);
+                if (result.Deleted.Count() != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public string GetFileUrl(string id)
         {
             var result = cloudinary.GetResourceByAssetId(id);
-            if (result.StatusCode.Equals("OK"))
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return result.Url;
             }
@@ -42,7 +69,7 @@ namespace Core.Utilities.Cloud
         public async Task<string> GetFileUrlAsync(string id)
         {
             var result = await cloudinary.GetResourceByAssetIdAsync(id);
-            if (result.StatusCode.Equals("OK"))
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return result.Url;
             }
@@ -59,71 +86,68 @@ namespace Core.Utilities.Cloud
             throw new NotImplementedException();
         }
 
-        public bool UploadFile(string path, FileTypesEnum type)
+        public string UploadFile(string path, FileTypesEnum type)
         {
             switch (type)
             {
                 case FileTypesEnum.Image:
                     var uploadParams = new ImageUploadParams()
                     {
-                        File = new FileDescription(path),
-                        PublicId = new Guid().ToString()
+                        File = new FileDescription(@path)
                     };
                     var uploadResult = cloudinary.Upload(uploadParams);
-                    if (uploadResult.StatusCode.Equals(StatusCodes.Status200OK))
+                    if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        return true;
+                        return uploadResult.AssetId;
                     }
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Video:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Pdf:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Excel:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Text:
-                    return false;
+                    return string.Empty;
 
                 default:
-                    return false;
+                    return string.Empty;
             }
         }
 
-        public async Task<bool> UploadFileAsync(string path, FileTypesEnum type)
+        public async Task<string> UploadFileAsync(string path, FileTypesEnum type)
         {
             switch (type)
             {
                 case FileTypesEnum.Image:
                     var uploadParams = new ImageUploadParams()
                     {
-                        File = new FileDescription(path),
-                        PublicId = new Guid().ToString()
-                    };
+                        File = new FileDescription(@path)                    };
                     var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                    if (uploadResult.StatusCode.Equals("OK"))
+                    if (uploadResult.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        return true;
+                        return uploadResult.AssetId;
                     }
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Video:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Pdf:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Excel:
-                    return false;
+                    return string.Empty;
 
                 case FileTypesEnum.Text:
-                    return false;
+                    return string.Empty;
 
                 default:
-                    return false;
+                    return string.Empty;
             }
         }
     }

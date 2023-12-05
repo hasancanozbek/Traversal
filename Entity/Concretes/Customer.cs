@@ -8,6 +8,7 @@ namespace EntityLayer.Concretes
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public DateTime? BirthDate { get; set; }
+        public string? ProfilePhotoUrl { get; set; }
 
         //Navigation Properties
         public virtual List<Blog> BlogList { get; set; }
