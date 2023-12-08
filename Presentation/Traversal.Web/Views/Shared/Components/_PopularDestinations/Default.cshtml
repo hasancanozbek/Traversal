@@ -7,15 +7,21 @@
             <h3 class="hny-title">Popüler Lokasyonlar</h3>
         </div>
         <div class="row bottom-ab-grids">
-
             @foreach (var trip in Model)
             {
                 <div class="col-lg-6 subject-card mt-lg-0 mt-4">
                     <div class="subject-card-header p-4">
-                        <a href="#" class="card_title p-lg-4d-block">
+                        <a href="/Trips/TripDetail/@trip.Id" class="card_title p-lg-4d-block">
                             <div class="row align-items-center">
                                 <div class="col-sm-5 subject-img">
-                                    <img src="~/Traversal-Liberty/assets/images/g3.jpg" class="img-fluid" alt="">
+                                    @if (trip.ImageList.Count == 0)
+                                    {
+                                        <img src="~/Traversal-Liberty/assets/images/g6.jpg" class="img-fluid" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img src="@trip.ImageList.First()" class="img-fluid" alt="">
+                                    }
                                 </div>
                                 <div class="col-sm-7 subject-content mt-sm-0 mt-4">
                                     <h4>@trip.Title</h4>
@@ -25,11 +31,10 @@
                                         <span>@trip.Price TL</span>
                                     </div>
                                     <p class="sub-para">@trip.Day Gün @(trip.Day + 1) Gece</p>
-                                    @* <a href="~/Traversal-Liberty/contact.html" class="btn btn-style btn-secondary mt-5">Rezervasyon</a> *@
                                 </div>
                             </div>
                         </a>
-                    <a href="~/Traversal-Liberty/contact.html" class="btn btn-style btn-secondary mt-2">Rezervasyon</a>
+                        <a href="/Trips/TripDetail/@trip.Id" class="btn btn-style btn-secondary mt-2">Rezervasyon</a>
                     </div>
                 </div>
             }

@@ -32,7 +32,16 @@
                             {
                                 <div class="col-lg-4 col-md-4 col-6">
                                     <div class="column">
-                                        <a href="/Trips/TripDetail/@trip.Id"><img src="~/Traversal-Liberty/assets/images/g1.jpg" alt="" class="img-fluid"></a>
+                                        <a href="/Trips/TripDetail/@trip.Id">
+                                            @if (trip.ImageList.Count == 0)
+                                            {
+                                                <img src="~/Traversal-Liberty/assets/images/g6.jpg" class="img-fluid" alt="">
+                                            }
+                                            else
+                                            {
+                                                <img src="@trip.ImageList.First()" class="img-fluid" alt="">
+                                            }
+                                        </a>
                                         <div class="info">
                                             <h4><a href="/Trips/TripDetail/@trip.Id">@trip.Title</a></h4>
                                             <p>@trip.Day Gün</p>

@@ -14,8 +14,11 @@ namespace Traversal.Web.ViewComponents.Default
 
         public IViewComponentResult Invoke()
         {
-            //var blogList = blogService.GetAllBlogList().OrderByDescending(o => o.CreatedTime);
-            //return View(blogList);
+            var result = blogService.GetAllBlogList();
+            if (result.IsSuccess)
+            {
+                return View(result.Data.OrderByDescending(o => o.CreatedTime));
+            }
             return View();
         }
     }

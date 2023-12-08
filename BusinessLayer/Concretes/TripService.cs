@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.Trips;
+using Core.Enums;
+using Core.Utilities.Cloud;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
 using EntityLayer.Concretes;
@@ -12,17 +14,35 @@ namespace BusinessLayer.Concretes
     {
         private readonly ITripRepository tripRepository;
         private readonly IMapper mapper;
+        private readonly ICloudRepo cloudRepo;
+        private readonly ITripKeyRepository tripKeyRepository;
 
-        public TripService(ITripRepository tripRepository, IMapper mapper)
+        public TripService(ITripRepository tripRepository, IMapper mapper, ICloudRepo cloudRepo, ITripKeyRepository tripKeyRepository)
         {
             this.tripRepository = tripRepository;
             this.mapper = mapper;
+            this.cloudRepo = cloudRepo;
+            this.tripKeyRepository = tripKeyRepository;
         }
 
         public async Task<Result> AddTrip(AddTripDto trip)
         {
             var tripEntity = mapper.Map<Trip>(trip);
-            await tripRepository.AddAsync(tripEntity);
+            var tripId = await tripRepository.AddAsync(tripEntity);
+            foreach (var image in trip.ImageList)
+            {
+                var fileAssetId = await cloudRepo.UploadFileAsync(@image, FileTypesEnum.Image);
+                if (!fileAssetId.Equals(string.Empty))
+                {
+                    var keyValuePair = new TripKey()
+                    {
+                        TripId = tripId,
+                        Key = BlogKeysEnum.image.ToString(),
+                        Value = fileAssetId
+                    };
+                    await tripKeyRepository.AddAsync(keyValuePair);
+                }
+            }
             return new SuccessResult("Trip added");
         }
 
@@ -47,6 +67,13 @@ namespace BusinessLayer.Concretes
             {
                 trip.GuideFirstName = tripList.First(s => s.Id == trip.Id).Guide.FirstName;
                 trip.GuideLastName = tripList.First(s => s.Id == trip.Id).Guide.LastName;
+                trip.ImageList = new List<string>();
+                var imageKeys = tripKeyRepository.GetWhere(s => s.TripId == trip.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
+                foreach (var imageId in imageKeys)
+                {
+                    var url = cloudRepo.GetFileUrl(imageId);
+                    trip.ImageList.Add(url);
+                }
             }
             return new SuccessDataResult<List<TripDto>>("All trips listed", tripListDto);
         }
@@ -59,6 +86,13 @@ namespace BusinessLayer.Concretes
             {
                 tripDto.GuideFirstName = trip.Guide.FirstName;
                 tripDto.GuideLastName = trip.Guide.LastName;
+                tripDto.ImageList = new List<string>();
+                var imageKeys = tripKeyRepository.GetWhere(s => s.TripId == trip.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
+                foreach (var imageId in imageKeys)
+                {
+                    var url = cloudRepo.GetFileUrl(imageId);
+                    tripDto.ImageList.Add(url);
+                }
             }
             return new SuccessDataResult<TripDto>("Trip information listed", tripDto);
         }

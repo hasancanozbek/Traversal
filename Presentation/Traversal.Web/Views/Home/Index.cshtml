@@ -1,4 +1,8 @@
-﻿@await Component.InvokeAsync("_Slider")
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Component.InvokeAsync("_Slider")
 @await Component.InvokeAsync("_PopularDestinations")
 @await Component.InvokeAsync("_Statistics")
 @await Component.InvokeAsync("_Blogs")

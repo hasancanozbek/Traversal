@@ -8,12 +8,9 @@ namespace Traversal.Web.Controllers
     public class BlogsController : Controller
     {
         private readonly IBlogService blogService;
-        private readonly ICloudRepo cloudRepo;
-
-        public BlogsController(IBlogService blogService, ICloudRepo cloudRepo)
+        public BlogsController(IBlogService blogService)
         {
-            this.blogService = blogService;
-            this.cloudRepo = cloudRepo;
+            this.blogService = blogService;        
         }
 
         public IActionResult Index()

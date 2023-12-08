@@ -11,5 +11,6 @@
         public string GuideLastName { get; set; }
         public int Day { get; set; }
         public DateTime CreatedTime { get; set; }
+        public List<string> ImageList { get; set; }
     }
 }
