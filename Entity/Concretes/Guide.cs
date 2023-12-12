@@ -1,14 +1,15 @@
-﻿using EntityLayer.Abstracts;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace EntityLayer.Concretes
 {
-    public class Guide : IEntity
+    public class Guide : IdentityUser<int>
     {
+        public DateTime CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
+        public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
-        public string Email { get; set; }
-        public string CellPhone { get; set; }
         public string  Description { get; set; }
 
         //Navigation Properties

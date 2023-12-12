@@ -1,4 +1,6 @@
-﻿<section class="w3l-main-slider" id="home">
+﻿@using BusinessLayer.Dtos.Countries
+@model List<CountryDto>
+<section class="w3l-main-slider" id="home">
     <div class="banner-content">
         <div id="demo-1"
              data-zs-src='["/Traversal-Liberty/assets/images/banner1.jpg", "/Traversal-Liberty/assets/images/banner2.jpg","/Traversal-Liberty/assets/images/banner3.jpg", "/Traversal-Liberty/assets/images/banner4.jpg"]'
@@ -14,14 +16,11 @@
                                     <div class="form-input col-md-4 mt-md-0 mt-3">
 
                                         <select name="selectpicker" class="selectpicker">
-                                            <option value="">Bölge</option>
-                                            <option value="africa">Afrika</option>
-                                            <option value="america">Kuzey Amerika</option>
-                                            <option value="america">Güney Amerika</option>
-                                            <option value="asia">Asya</option>
-                                            <option value="europe">Avrupa</option>
-                                            <option value="antarctica">Antartika</option>
-                                            <option value="australia">Avustralya</option>
+                                            <option value="">Ülke</option>
+                                            @foreach (var country in Model)
+                                            {
+                                                <option value=@country.Code>@country.Name</option>
+                                            }
                                         </select>
 
                                     </div>

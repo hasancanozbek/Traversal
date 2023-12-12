@@ -1,12 +1,14 @@
 ﻿using EntityLayer.Abstracts;
+using Microsoft.AspNetCore.Identity;
 namespace EntityLayer.Concretes
 {
-    public class Customer : IEntity
+    public class Customer : IdentityUser<int>
     {
+        public DateTime CreatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
+        public bool IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? ProfilePhotoUrl { get; set; }
 
