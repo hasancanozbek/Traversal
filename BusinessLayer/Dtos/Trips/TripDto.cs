@@ -1,4 +1,6 @@
-﻿namespace BusinessLayer.Dtos.Trips
+﻿using BusinessLayer.Dtos.Comments;
+
+namespace BusinessLayer.Dtos.Trips
 {
     public class TripDto
     {
@@ -12,5 +14,6 @@
         public int Day { get; set; }
         public DateTime CreatedTime { get; set; }
         public List<string> ImageList { get; set; }
+        public List<TripCommentDto> Comments { get; set; }
     }
 }

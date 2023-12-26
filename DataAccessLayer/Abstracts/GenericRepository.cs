@@ -97,5 +97,24 @@ namespace DataAccessLayer.Abstracts
         }
 
         public async Task<int> SaveAsync() => await context.SaveChangesAsync();
+
+        public async Task<bool> SetActivity(T entity, bool isActive)
+        {
+            var entityEntry = await GetByIdAsync(entity.Id);
+            if (entityEntry != null)
+            {
+                if (isActive)
+                {
+                    entityEntry.IsActive = true;
+                }
+                else
+                {
+                    entityEntry.IsActive = false;
+                }
+                await SaveAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

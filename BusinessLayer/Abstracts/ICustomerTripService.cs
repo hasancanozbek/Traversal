@@ -14,5 +14,7 @@ namespace BusinessLayer.Abstracts
         Task<DataResult<CustomerTripDto>> UpdateCustomerTrip(AddCustomerTripDto customerTrip, int customerTripId);
         Task<Result> AddCustomerTrip(AddCustomerTripDto customerTrip);
         Task<Result> DeleteCustomerTrip(CustomerTripDto customerTrip);
+        bool IsParticipantToTrip(int customerId, int tripId);
+        bool IsRightToComment(int customerId, int tripId);
     }
 }

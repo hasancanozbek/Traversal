@@ -21,16 +21,23 @@ namespace BusinessLayer.Concretes
         public async Task<Result> AddCustomer(AddCustomerDto customer)
         {
             var customerEntity = mapper.Map<Customer>(customer);
-            customerEntity.PasswordHash = customer.Password;
-            await customerRepository.AddAsync(customerEntity);
-            return new SuccessResult("Customer added");
+            if (customerEntity != null)
+            {
+				await customerRepository.AddAsync(customerEntity);
+				return new SuccessResult("Customer added");
+			}
+            return new ErrorResult("Customer couldn't added");
         }
 
         public async Task<Result> DeleteCustomer(CustomerDto customer)
         {
-            var customerEntity = mapper.Map<Customer>(customer);
-            await customerRepository.RemoveAsync(customerEntity);
-            return new SuccessResult("Customer deleted");
+            var entity = mapper.Map<Customer>(customer);
+            var isSuccessfull = await customerRepository.SetActivity(entity, false);
+            if (isSuccessfull)
+            {
+                return new SuccessResult("Customer deleted");
+            }
+            return new ErrorResult("Customer couldn't deleted");
         }
 
         public DataResult<IQueryable<Customer>> GetAllCustomersAsQueryable()
@@ -58,14 +65,22 @@ namespace BusinessLayer.Concretes
             var customerEntity = await customerRepository.GetByIdAsync(customerId);
             if (customerEntity != null)
             {
-                customerEntity.Email = customer.Email ?? customerEntity.Email;
-                customerEntity.PasswordHash = customer.Password ?? customerEntity.PasswordHash;
-                //customerEntity.CellPhone = customer.CellPhone ?? customerEntity.CellPhone;
                 var customerDto = mapper.Map<CustomerDto>(customerEntity);
-                customerRepository.Update(customerEntity);
+                await customerRepository.Update(customerEntity);
                 return new SuccessDataResult<CustomerDto>("Customer infortmation updated", customerDto);
             }
             return new ErrorDataResult<CustomerDto>("Customer couldn't found", null);
+        }
+
+        public DataResult<CustomerDto> GetCustomerByUserId(int userId)
+        {
+            var customer = customerRepository.GetWhere(s => s.UserId == userId).FirstOrDefault();
+            if (customer != null)
+            {
+                var customerDto = mapper.Map<CustomerDto>(customer);
+                return new SuccessDataResult<CustomerDto>(customerDto);
+            }
+            return new ErrorDataResult<CustomerDto>(null);
         }
     }
 }

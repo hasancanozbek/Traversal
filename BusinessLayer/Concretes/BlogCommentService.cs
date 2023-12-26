@@ -26,7 +26,19 @@ namespace BusinessLayer.Concretes
             return new SuccessResult("Comment added");
         }
 
-        public async Task<Result> DeleteComment(BlogCommentDto comment)
+		public Result DeleteAllCommentOfBlog(int blogId)
+		{
+            var comments = GetCommentListOfBlogById(blogId);
+            if (comments.IsSuccess)
+            {
+                var commentList = mapper.Map<List<BlogComment>>(comments.Data);
+                commentRepository.RemoveRange(commentList);
+				return new SuccessResult("Comment deleted");
+			}
+			return new ErrorResult("Comment couldn't deleted");
+		}
+
+		public async Task<Result> DeleteComment(BlogCommentDto comment)
         {
             var commentEntity = mapper.Map<BlogComment>(comment);
             await commentRepository.RemoveAsync(commentEntity);

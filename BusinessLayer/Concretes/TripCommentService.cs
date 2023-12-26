@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
-using BusinessLayer.Dtos.BlogComments;
 using BusinessLayer.Dtos.Comments;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
@@ -12,23 +11,34 @@ namespace BusinessLayer.Concretes
     public class TripCommentService : ITripCommentService
     {
         private readonly ITripCommentRepository commentRepository;
-        private readonly ICustomerService customerService;
-        private readonly ITripDateService tripService;
+        private readonly ITripDateService tripDateService;
         private readonly IMapper mapper;
 
-        public TripCommentService(ITripCommentRepository commentRepository, IMapper mapper, ICustomerService customerService, ITripDateService tripService)
+        public TripCommentService(ITripCommentRepository commentRepository, IMapper mapper, ITripDateService tripDateService)
         {
             this.commentRepository = commentRepository;
             this.mapper = mapper;
-            this.customerService = customerService;
-            this.tripService = tripService;
+            this.tripDateService = tripDateService;
         }
 
         public async Task<Result> AddComment(AddTripCommentDto comment)
         {
             var commentEntity = mapper.Map<TripComment>(comment);
+            commentEntity.TripDateId = comment.TripId;
             await commentRepository.AddAsync(commentEntity);
             return new SuccessResult("Comment added");
+        }
+
+        public Result DeleteAllCommentOfTrip(int tripId)
+        {
+            var comments = GetCommentListOfTripById(tripId);
+            if (comments.IsSuccess)
+            {
+                var commentList = mapper.Map<List<TripComment>>(comments.Data);
+                commentRepository.RemoveRange(commentList);
+                return new SuccessResult("Comments deleted");
+            }
+            return new ErrorResult("Comment couldn't deleted");
         }
 
         public async Task<Result> DeleteComment(TripCommentDto comment)
@@ -61,7 +71,7 @@ namespace BusinessLayer.Concretes
         public DataResult<IQueryable<TripComment>> GetAllCommentsAsQueryable()
         {
             var commentList = commentRepository.GetAll();
-            return new SuccessDataResult<IQueryable<TripComment>>("All comments listed" , commentList);
+            return new SuccessDataResult<IQueryable<TripComment>>("All comments listed", commentList);
         }
 
         public async Task<DataResult<TripCommentDto>> GetCommentById(int id)
@@ -70,7 +80,6 @@ namespace BusinessLayer.Concretes
             var commentDto = mapper.Map<TripCommentDto>(comment);
             commentDto.CustomerFirstName = comment.Customer.FirstName;
             commentDto.CustomerLastName = comment.Customer.LastName;
-            commentDto.CustomerEmail = comment.Customer.Email;
             commentDto.TripName = comment.TripDate.Trip.Title;
             commentDto.TripDate = comment.TripDate.Date;
             return new SuccessDataResult<TripCommentDto>("Comment information listed", commentDto);
@@ -84,8 +93,20 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<TripCommentDto>> GetCommentListOfTripById(int tripId)
         {
-            var commentList = mapper.Map<List<TripCommentDto>>(commentRepository.GetWhere(c => c.TripDateId == tripId).ToList());
-            return new SuccessDataResult<List<TripCommentDto>>("All comments of customer listed", commentList);
+            var tripDateResult = tripDateService.GetAllTripDaysOfTripById(tripId);
+            if (tripDateResult.IsSuccess)
+            {
+                var tripDateIdList = tripDateResult.Data.Select(s => s.Id);
+                var commentList = commentRepository.GetWhere(c => tripDateIdList.Contains(c.TripDateId)).Include(i => i.Customer).ToList();
+                var commentDtoList = mapper.Map<List<TripCommentDto>>(commentList);
+                commentDtoList.ForEach(commentDto =>
+                {
+                    commentDto.CustomerFirstName = commentList.First(s => s.Id == commentDto.Id).Customer.FirstName;
+                    commentDto.CustomerLastName = commentList.First(s => s.Id == commentDto.Id).Customer.LastName;
+                });
+                return new SuccessDataResult<List<TripCommentDto>>("All comments of customer listed", commentDtoList);
+            }
+            return new ErrorDataResult<List<TripCommentDto>>("Comments of customer couldn't listed", null);
         }
 
         public async Task<DataResult<TripCommentDto>> UpdateComment(UpdateTripCommentDto comment, int commentId)

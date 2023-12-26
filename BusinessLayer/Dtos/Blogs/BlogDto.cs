@@ -1,4 +1,6 @@
-﻿namespace BusinessLayer.Dtos.Blogs
+﻿using BusinessLayer.Dtos.BlogComments;
+
+namespace BusinessLayer.Dtos.Blogs
 {
     public class BlogDto
     {
@@ -10,5 +12,6 @@
         public string CustomerFirstName { get; set; }
         public string CustomerLastName { get; set; }
         public DateTime CreatedTime { get; set; }
+        public List<BlogCommentDto> Comments { get; set; }
     }
 }

@@ -5,6 +5,6 @@ public static class ServiceRegistration
 {
     public static void AddCoreServices(this IServiceCollection services)
     {
-        services.AddSingleton<ICloudRepo, CloudinaryRepo>();
+        services.AddScoped<ICloudRepo, CloudinaryRepo>();
     }
 }

@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using BusinessLayer.Abstracts;
 using BusinessLayer.Dtos.CustomerTrips;
-using BusinessLayer.Dtos.Trips;
 using Core.Utilities.Results;
 using DataAccessLayer.Abstracts;
-using DataAccessLayer.Concretes;
 using EntityLayer.Concretes;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +11,16 @@ namespace BusinessLayer.Concretes
     public class CustomerTripService : ICustomerTripService
     {
         private readonly ICustomerTripRepository customerTripRepository;
+        private readonly ITripCommentService tripCommentService;
+        private readonly ITripDateService tripDateService;
         private readonly IMapper mapper;
 
-        public CustomerTripService(ICustomerTripRepository customerTripRepository, IMapper mapper)
+        public CustomerTripService(ICustomerTripRepository customerTripRepository, IMapper mapper, ITripCommentService tripCommentService, ITripDateService tripDateService)
         {
             this.customerTripRepository = customerTripRepository;
             this.mapper = mapper;
+            this.tripCommentService = tripCommentService;
+            this.tripDateService = tripDateService;
         }
 
         public async Task<Result> AddCustomerTrip(AddCustomerTripDto customerTrip)
@@ -43,7 +45,6 @@ namespace BusinessLayer.Concretes
             {
                 customerTrip.CustomerFirstName = customerTripList.First(s => s.Id == customerTrip.Id).Customer.FirstName;
                 customerTrip.CustomerLastName = customerTripList.First(s => s.Id == customerTrip.Id).Customer.LastName;
-                customerTrip.CustomerEmail = customerTripList.First(s => s.Id == customerTrip.Id).Customer.Email;
                 customerTrip.TripName = customerTripList.First(s => s.Id == customerTrip.Id).TripDate.Trip.Title;
             }
             return new SuccessDataResult<List<CustomerTripDto>>("All customer trips listed", customerTripListDto);
@@ -63,7 +64,6 @@ namespace BusinessLayer.Concretes
             {
                 customerTripDto.CustomerFirstName = customerTrip.Customer.FirstName;
                 customerTripDto.CustomerLastName = customerTrip.Customer.LastName;
-                customerTripDto.CustomerEmail = customerTrip.Customer.Email;
                 customerTripDto.TripName = customerTrip.TripDate.Trip.Title;
                 return new SuccessDataResult<CustomerTripDto>("Customer trip information listed", customerTripDto);
             }
@@ -79,7 +79,6 @@ namespace BusinessLayer.Concretes
                 var tmpCustomerTrip = customerTrips.First(s => s.Id == customerTrip.Id);
                 customerTrip.CustomerFirstName = tmpCustomerTrip.Customer.FirstName;
                 customerTrip.CustomerLastName = tmpCustomerTrip.Customer.LastName;
-                customerTrip.CustomerEmail = tmpCustomerTrip.Customer.Email;
                 customerTrip.TripName = tmpCustomerTrip.TripDate.Trip.Title;
             });
             return new SuccessDataResult<List<CustomerTripDto>>("All trip information of the customer is listed", customerTripsDto);
@@ -94,10 +93,33 @@ namespace BusinessLayer.Concretes
                 var tmpCustomerTrip = customerTrips.First(s => s.Id == customerTrip.Id);
                 customerTrip.CustomerFirstName = tmpCustomerTrip.Customer.FirstName;
                 customerTrip.CustomerLastName = tmpCustomerTrip.Customer.LastName;
-                customerTrip.CustomerEmail = tmpCustomerTrip.Customer.Email;
                 customerTrip.TripName = tmpCustomerTrip.TripDate.Trip.Title;
             });
             return new SuccessDataResult<List<CustomerTripDto>>("All trip information of the customer is listed", customerTripsDto);
+        }
+
+        public bool IsParticipantToTrip(int customerId, int tripId)
+        {
+            var result = GetCustomerTripListByCustomerId(customerId);
+            if (result.IsSuccess)
+            {
+                var isParticipant = result.Data.Any(s => s.TripDateId == tripId);
+                return isParticipant;
+            }
+            return false;
+        }
+
+        public bool IsRightToComment(int customerId, int tripId)
+        {
+            var participantResult = IsParticipantToTrip(customerId, tripId);
+            var commentResult = tripCommentService.GetCommentListOfCustomerById(customerId);
+            if (participantResult && commentResult.IsSuccess)
+            {
+                var tripDateIdList = tripDateService.GetAllTripDaysOfTripById(tripId).Data.Select(s => s.Id);
+                var isRightToComment = commentResult.Data.Any(s => tripDateIdList.Contains(s.TripDateId));
+                return !isRightToComment;
+            }
+            return false;
         }
 
         public async Task<DataResult<CustomerTripDto>> UpdateCustomerTrip(AddCustomerTripDto customerTrip, int customerTripId)

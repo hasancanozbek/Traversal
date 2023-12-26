@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Dtos.BlogComments;
 using BusinessLayer.Dtos.Blogs;
 using BusinessLayer.Dtos.Cities;
 using BusinessLayer.Dtos.Comments;
@@ -7,6 +8,7 @@ using BusinessLayer.Dtos.Customers;
 using BusinessLayer.Dtos.CustomerTrips;
 using BusinessLayer.Dtos.Guides;
 using BusinessLayer.Dtos.Locations;
+using BusinessLayer.Dtos.TripDates;
 using BusinessLayer.Dtos.TripLocations;
 using BusinessLayer.Dtos.Trips;
 using EntityLayer.Concretes;
@@ -20,7 +22,6 @@ namespace BusinessLayer.Dtos
             CreateMap<TripComment, TripCommentDto>()
             .ForMember(dest => dest.CustomerFirstName, opt => opt.MapFrom(src => src.Customer.FirstName))
             .ForMember(dest => dest.CustomerLastName, opt => opt.MapFrom(src => src.Customer.LastName))
-            .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.Customer.Email))
             .ForMember(dest => dest.TripName, opt => opt.MapFrom(src => src.TripDate.Trip.Title))
             .ForMember(dest => dest.TripDate, opt => opt.MapFrom(src => src.TripDate.Date))
             .ReverseMap();
@@ -57,6 +58,12 @@ namespace BusinessLayer.Dtos
             CreateMap<Trip, TripDto>().ReverseMap();
             CreateMap<Trip, AddTripDto>().ReverseMap();
             CreateMap<Trip, UpdateTripDto>().ReverseMap();
+
+            CreateMap<TripDate, TripDateDto>().ReverseMap();
+
+            CreateMap<BlogComment, AddBlogCommentDto>().ReverseMap();
+            CreateMap<BlogComment, UpdateBlogCommentDto>().ReverseMap();
+            CreateMap<BlogComment, BlogCommentDto>().ReverseMap();
         }
     }
 }

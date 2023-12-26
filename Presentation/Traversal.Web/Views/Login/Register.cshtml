@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = null;
+}
+@model UserRegisterModel
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Traversal | Kayıt</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- LINEARICONS -->
+	<link rel="stylesheet" href="~/Register/fonts/linearicons/style.css">
+
+	<!-- STYLE CSS -->
+	<link rel="stylesheet" href="~/Register/css/style.css">
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<div class="inner">
+			<img src="~/Register/images/image-1.png" alt="" class="image-1">
+			<form asp-controller="Login" asp-action="Register">
+				<h3>Üye Kayıt Sayfası</h3>
+				<div class="form-holder">
+					<span class="lnr lnr-users"></span>
+					<input type="text" asp-for="FirstName" class="form-control" placeholder="İsim" name="FirstName">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-users"></span>
+					<input type="text" asp-for="LastName" class="form-control" placeholder="Soyisim" name="LastName">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-phone-handset"></span>
+					<input type="text" asp-for="PhoneNumber" class="form-control" placeholder="Telefon Numarası" name="PhoneNumber">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-envelope"></span>
+					<input type="text" asp-for="Email" class="form-control" placeholder="Email" name="Email">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-calendar-full"></span>
+					<input type="date" asp-for="BirthDate" class="form-control" placeholder="Doğum Tarihi" name="BirthDate">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-lock"></span>
+					<input type="password" asp-for="Password" class="form-control" placeholder="Şifre" name="Password">
+				</div>
+				<div class="form-holder">
+					<span class="lnr lnr-lock"></span>
+					<input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Şifreyi doğrulayın" name="ConfirmPassword">
+				</div>
+				<button>
+					<span>Kaydol</span>
+				</button>
+				<div id="error-container" class="position-fixed bottom-0 end-0 p-3">
+					@if (!ViewContext.ModelState.IsValid)
+					{
+						<br />
+						@foreach (var error in ViewContext.ModelState)
+						{
+							<p style ="color:red;"> <b>@Html.ValidationMessage(error.Key)</b> </p>
+						}
+					}
+				</div>
+			</form>
+			<img src="~/Register/images/image-2.png" alt="" class="image-2">
+		</div>
+	</div>
+
+	<script src="~/Register/js/jquery-3.3.1.min.js"></script>
+	<script src="~/Register/js/main.js"></script>
+</body>
+</html>

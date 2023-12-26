@@ -14,5 +14,6 @@ namespace BusinessLayer.Abstracts
         Task<Result> AddComment(AddBlogCommentDto comment);
         Task<DataResult<BlogCommentDto>> UpdateComment(UpdateBlogCommentDto comment, int commentId);
         Task<Result> DeleteComment(BlogCommentDto comment);
+        Result DeleteAllCommentOfBlog(int blogId);
     }
 }

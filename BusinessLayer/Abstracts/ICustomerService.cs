@@ -11,6 +11,7 @@ namespace BusinessLayer.Abstracts
         Task<DataResult<CustomerDto>> GetCustomerById(int customerId);
         Task<Result> AddCustomer(AddCustomerDto customer);
         Task<DataResult<CustomerDto>> UpdateCustomer(int customerId, UpdateCustomerDto customer);
+        DataResult<CustomerDto> GetCustomerByUserId(int userId);
         Task<Result> DeleteCustomer(CustomerDto customer);
     }
 }

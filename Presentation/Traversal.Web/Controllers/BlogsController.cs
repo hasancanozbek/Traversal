@@ -1,16 +1,25 @@
 ﻿using BusinessLayer.Abstracts;
+using BusinessLayer.Concretes;
+using BusinessLayer.Dtos.BlogComments;
 using BusinessLayer.Dtos.Blogs;
-using Core.Utilities.Cloud;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Traversal.Web.Models;
 
 namespace Traversal.Web.Controllers
 {
+    [AllowAnonymous]
     public class BlogsController : Controller
     {
         private readonly IBlogService blogService;
-        public BlogsController(IBlogService blogService)
+        private readonly IBlogCommentService blogCommentService;
+        private readonly ICustomerService customerService;
+        public BlogsController(IBlogService blogService, IBlogCommentService blogCommentService, ICustomerService customerService)
         {
-            this.blogService = blogService;        
+            this.blogService = blogService;
+            this.blogCommentService = blogCommentService;
+            this.customerService = customerService;
         }
 
         public IActionResult Index()
@@ -29,7 +38,16 @@ namespace Traversal.Web.Controllers
             var result = await blogService.GetBlogById(id);
             if (result.IsSuccess)
             {
-                return View(result.Data);
+                if (HttpContext.User.Identity.IsAuthenticated)
+                {
+                    var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    ViewBag.UserId = userId;
+                }
+                var model = new BlogDetailViewModel()
+                {
+                    Blog = result.Data
+                };
+                return View(model);
             }
             return View();
         }
@@ -40,5 +58,20 @@ namespace Traversal.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddComment(BlogDetailViewModel model)
+        {
+            var customerResult = customerService.GetCustomerByUserId(model.AddBlogCommentDto.CustomerId);
+            if (customerResult.IsSuccess)
+            {
+                model.AddBlogCommentDto.CustomerId = customerResult.Data.Id;
+                var result = await blogCommentService.AddComment(model.AddBlogCommentDto);
+                if (result.IsSuccess)
+                {
+                    return RedirectToAction("BlogDetail", new { id = model.AddBlogCommentDto.BlogId });
+                }
+            };
+            return View("/Blogss/Index");
+        }
     }
 }

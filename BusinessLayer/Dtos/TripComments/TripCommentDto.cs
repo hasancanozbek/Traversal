@@ -10,6 +10,7 @@
         public string CustomerFirstName { get; set; }
         public string CustomerLastName { get; set; }
         public string CustomerEmail { get; set; }
+        public string CustomerProfilePhotoUrl { get; set; }
         public string TripName { get; set; }
         public DateTime TripDate { get; set; }
         public DateTime CreatedTime { get; set; }

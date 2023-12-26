@@ -12,20 +12,22 @@ namespace BusinessLayer.Concretes
 {
     public class TripService : ITripService
     {
+        private readonly ITripCommentService tripCommentService;
         private readonly ITripRepository tripRepository;
         private readonly IMapper mapper;
         private readonly ICloudRepo cloudRepo;
         private readonly ITripKeyRepository tripKeyRepository;
 
-        public TripService(ITripRepository tripRepository, IMapper mapper, ICloudRepo cloudRepo, ITripKeyRepository tripKeyRepository)
-        {
-            this.tripRepository = tripRepository;
-            this.mapper = mapper;
-            this.cloudRepo = cloudRepo;
-            this.tripKeyRepository = tripKeyRepository;
-        }
+		public TripService(ITripRepository tripRepository, IMapper mapper, ICloudRepo cloudRepo, ITripKeyRepository tripKeyRepository, ITripCommentService tripCommentService)
+		{
+			this.tripRepository = tripRepository;
+			this.mapper = mapper;
+			this.cloudRepo = cloudRepo;
+			this.tripKeyRepository = tripKeyRepository;
+			this.tripCommentService = tripCommentService;
+		}
 
-        public async Task<Result> AddTrip(AddTripDto trip)
+		public async Task<Result> AddTrip(AddTripDto trip)
         {
             var tripEntity = mapper.Map<Trip>(trip);
             var tripId = await tripRepository.AddAsync(tripEntity);
@@ -49,6 +51,7 @@ namespace BusinessLayer.Concretes
         public async Task<Result> DeleteTrip(TripDto trip)
         {
             var tripEntity = mapper.Map<Trip>(trip);
+            tripCommentService.DeleteAllCommentOfTrip(trip.Id);
             await tripRepository.RemoveAsync(tripEntity);
             return new SuccessResult("Trip deleted");
         }
@@ -67,6 +70,9 @@ namespace BusinessLayer.Concretes
             {
                 trip.GuideFirstName = tripList.First(s => s.Id == trip.Id).Guide.FirstName;
                 trip.GuideLastName = tripList.First(s => s.Id == trip.Id).Guide.LastName;
+
+                trip.Comments = tripCommentService.GetCommentListOfTripById(trip.Id).Data;
+
                 trip.ImageList = new List<string>();
                 var imageKeys = tripKeyRepository.GetWhere(s => s.TripId == trip.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
                 foreach (var imageId in imageKeys)
@@ -86,7 +92,10 @@ namespace BusinessLayer.Concretes
             {
                 tripDto.GuideFirstName = trip.Guide.FirstName;
                 tripDto.GuideLastName = trip.Guide.LastName;
-                tripDto.ImageList = new List<string>();
+
+                tripDto.Comments = tripCommentService.GetCommentListOfTripById(trip.Id).Data;
+
+				tripDto.ImageList = new List<string>();
                 var imageKeys = tripKeyRepository.GetWhere(s => s.TripId == trip.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
                 foreach (var imageId in imageKeys)
                 {

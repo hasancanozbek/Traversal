@@ -15,6 +15,7 @@ namespace DataAccessLayer.Abstracts
         Task<bool> RemoveRange(List<T> entities);
         Task<bool> RemoveAsync(T entity);
         Task<bool> Update(T entity);
+        Task<bool> SetActivity(T entity, bool isActive);
         Task<int> SaveAsync();
     }
 }

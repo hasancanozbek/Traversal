@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public int TripId { get; set; }
+        public int TripDateId { get; set; }
         public string TripName { get; set; }
         public string CustomerFirstName { get; set; }
         public string CustomerLastName { get; set; }
