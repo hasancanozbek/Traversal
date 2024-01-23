@@ -13,5 +13,6 @@ namespace BusinessLayer.Abstracts
         Task<DataResult<TripDateDto>> UpdateTripDate(UpdateTripDateDto tripDate, int tripDateId);
         Task<Result> AddTripDate(AddTripDateDto tripDate);
         Task<Result> DeleteTripDate(TripDateDto tripDate);
+        Task SetActive(TripDate tripDate, bool isActive);
     }
 }

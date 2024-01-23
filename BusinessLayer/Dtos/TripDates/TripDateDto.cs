@@ -9,5 +9,6 @@
         public string TripTitle { get; set; }
         public int TripPrice { get; set; }
         public int TripDay { get; set; }
+        public bool IsActive { get; set; }
     }
 }

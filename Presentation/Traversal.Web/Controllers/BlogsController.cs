@@ -1,15 +1,11 @@
 ﻿using BusinessLayer.Abstracts;
-using BusinessLayer.Concretes;
-using BusinessLayer.Dtos.BlogComments;
 using BusinessLayer.Dtos.Blogs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Traversal.Web.Models;
 
 namespace Traversal.Web.Controllers
 {
-    [AllowAnonymous]
     public class BlogsController : Controller
     {
         private readonly IBlogService blogService;

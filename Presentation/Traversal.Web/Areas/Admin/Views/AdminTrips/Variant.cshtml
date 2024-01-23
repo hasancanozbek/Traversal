@@ -1,0 +1,56 @@
+﻿@using Traversal.Web.Areas.Admin.Models
+
+@{
+    ViewData["Title"] = "Variant";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AdminTripDateModel
+
+<div class="card">
+    <h5 class="card-header">@Model.Trip.Title Varyasyon Tablosu</h5>
+    @if (Model.TripDateList != null)
+    {
+        <div class="table-responsive text-nowrap p-4 m-4 mt-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Toplam Kota</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var item in Model.TripDateList)
+                    {
+                        <tr>
+                            <td>@item.Date.ToShortDateString()</td>
+                            <td>@item.Quota</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div>
+        <form asp-action="AddVariant" asp-controller="AdminTrips" asp-area="Admin" method="post">
+            <div class="form-group">
+                <br />
+                <div class="row">
+                    <br />
+                    <div class="col-md-4">
+                        <label>Tur Başlığı</label>
+                        <input asp-for="Date" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label>Fiyat:</label>
+                        <input asp-for="Quota" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" asp-for="Trip.Id" value="@Model.Trip.Id" />
+            <div class="form-group">
+                <br />
+                <button type="submit" id="tur-olustur" class="btn btn-primary">Varyasyon Ekle</button>
+            </div>
+        </form>
+    </div>
+</div>

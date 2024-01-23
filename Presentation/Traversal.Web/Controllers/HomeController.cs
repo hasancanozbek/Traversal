@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Abstracts;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Traversal.Web.Models;
 
@@ -7,13 +6,6 @@ namespace Traversal.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ITripService tripService;
-
-        public HomeController(ITripService tripService)
-        {
-            this.tripService = tripService;
-        }
-
         public IActionResult Index()
         {
             return View();

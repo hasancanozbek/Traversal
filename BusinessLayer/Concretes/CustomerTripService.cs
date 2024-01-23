@@ -80,6 +80,9 @@ namespace BusinessLayer.Concretes
                 customerTrip.CustomerFirstName = tmpCustomerTrip.Customer.FirstName;
                 customerTrip.CustomerLastName = tmpCustomerTrip.Customer.LastName;
                 customerTrip.TripName = tmpCustomerTrip.TripDate.Trip.Title;
+                customerTrip.Date = tmpCustomerTrip.TripDate.Date;
+                customerTrip.Day = tmpCustomerTrip.TripDate.Trip.Day;
+                customerTrip.TripId = tmpCustomerTrip.TripDate.TripId;
             });
             return new SuccessDataResult<List<CustomerTripDto>>("All trip information of the customer is listed", customerTripsDto);
         }
@@ -122,13 +125,29 @@ namespace BusinessLayer.Concretes
             return false;
         }
 
+        public async Task<Result> Reservation(int tripDateId, int customerId)
+        {
+            var tripDate = await tripDateService.GetTripDateById(tripDateId);
+            if (tripDate != null)
+            {
+                var customerTripData = new AddCustomerTripDto()
+                {
+                    CustomerId = customerId,
+                    TripDateId = tripDateId,
+                    Price = tripDate.Data.TripPrice
+                };
+                return await AddCustomerTrip(customerTripData);
+            }
+            return new ErrorResult("Reservation couldn't saved");
+        }
+
         public async Task<DataResult<CustomerTripDto>> UpdateCustomerTrip(AddCustomerTripDto customerTrip, int customerTripId)
         {
             var customerTripEntity = await customerTripRepository.GetByIdAsync(customerTripId);
             if (customerTripEntity != null)
             {
                 customerTripEntity.CustomerId = customerTrip.CustomerId == 0 ? customerTripEntity.CustomerId : customerTrip.CustomerId;
-                customerTripEntity.TripDateId = customerTrip.TripId == 0 ? customerTripEntity.TripDateId : customerTrip.TripId;
+                customerTripEntity.TripDateId = customerTrip.TripDateId == 0 ? customerTripEntity.TripDateId : customerTrip.TripDateId;
                 await customerTripRepository.Update(customerTripEntity);
                 var mappedCustomerTrip = mapper.Map<CustomerTripDto>(customerTripEntity);
                 return new SuccessDataResult<CustomerTripDto>("Customer trip updated", mappedCustomerTrip);

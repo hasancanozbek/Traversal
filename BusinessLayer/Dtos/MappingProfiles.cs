@@ -60,6 +60,8 @@ namespace BusinessLayer.Dtos
             CreateMap<Trip, UpdateTripDto>().ReverseMap();
 
             CreateMap<TripDate, TripDateDto>().ReverseMap();
+            CreateMap<TripDate, AddTripDateDto>().ReverseMap();
+            CreateMap<TripDate, UpdateTripDateDto>().ReverseMap();
 
             CreateMap<BlogComment, AddBlogCommentDto>().ReverseMap();
             CreateMap<BlogComment, UpdateBlogCommentDto>().ReverseMap();

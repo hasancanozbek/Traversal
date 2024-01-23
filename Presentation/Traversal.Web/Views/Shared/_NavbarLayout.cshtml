@@ -37,15 +37,21 @@
             </div>
             @if (User.Identity.IsAuthenticated)
             {
+                var profilePictureUrlClaim = User.Claims.FirstOrDefault(x => x.Type == "ProfilePhotoUrl");
+                string profilePhotoUrl = string.Empty;
+                if (profilePictureUrlClaim != null)
+                {
+                    profilePhotoUrl = profilePictureUrlClaim.Value;
+                }
                 <div class="dropdown">
                     <button class="btn btn-style dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="~/Traversal-Liberty/assets/images/c1.jpg" class="rounded-circle" alt="Profile" width="50" height="50">
+                        <img src="@profilePhotoUrl" class="rounded-circle" alt="Profile" width="50" height="50">
                         <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item btn-secondary" href="@Url.Action("Logout", "Login")" >Çıkış Yap</a>
-                        <a class="dropdown-item btn-secondary" href="@Url.Action("Logout", "Login")">Bilgilerim</a>
-                        <a class="dropdown-item btn-secondary" href="@Url.Action("Logout", "Login")">Rezervasyonlarım</a>
+                        <a class="dropdown-item btn-secondary" href="@Url.Action("Logout", "Login")">Çıkış Yap</a>
+                        <a class="dropdown-item btn-secondary" href="@Url.Action("Profile", "Customers")">Bilgilerim</a>
+                        <a class="dropdown-item btn-secondary" href="@Url.Action("GetCustomerTrips", "Customers")">Rezervasyonlarım</a>
                     </div>
                 </div>
             }

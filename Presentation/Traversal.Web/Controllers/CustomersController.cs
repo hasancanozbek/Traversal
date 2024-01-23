@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.Abstracts;
-using BusinessLayer.Dtos.Customers;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Traversal.Web.Models;
 
 namespace Traversal.Web.Controllers
@@ -16,10 +16,11 @@ namespace Traversal.Web.Controllers
             this.customerTripService = customerTripService;
         }
 
-        [HttpGet]
-        public IActionResult Profile(int id)
+        [HttpGet("Profile")]
+        public IActionResult Profile()
         {
-            var result = customerService.GetCustomerByUserId(id);
+            var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = customerService.GetCustomerByUserId(userId);
             var model = new CustomerViewModel();
             if (result.IsSuccess)
             {
@@ -28,16 +29,21 @@ namespace Traversal.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Profile(UpdateCustomerDto model)
+        [HttpPost("Profile")]
+        public async Task<IActionResult> Profile(CustomerViewModel model)
         {
-            return View();
+            if (model.UpdateCustomerModel != null)
+            {
+                await customerService.UpdateCustomer(model.CustomerModel.Id, model.UpdateCustomerModel);
+            }
+            return RedirectToAction("Logout", "Login");
         }
 
-        [HttpGet]
-        public IActionResult GetCustomerTrips(int id)
+        [HttpGet("GetCustomerTrips")]
+        public IActionResult GetCustomerTrips()
         {
-            var customer = customerService.GetCustomerByUserId(id);
+            var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var customer = customerService.GetCustomerByUserId(userId);
             var model = new CustomerViewModel();
             if (customer.IsSuccess)
             {
@@ -47,7 +53,7 @@ namespace Traversal.Web.Controllers
                     model.CustomerTripList = result.Data;
                 }
             }
-            return View(model);
+            return View("CustomerTrips", model);
         }
     }
 }

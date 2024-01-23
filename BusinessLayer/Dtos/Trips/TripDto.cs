@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Dtos.Comments;
+using BusinessLayer.Dtos.TripDates;
 
 namespace BusinessLayer.Dtos.Trips
 {
@@ -15,5 +16,6 @@ namespace BusinessLayer.Dtos.Trips
         public DateTime CreatedTime { get; set; }
         public List<string> ImageList { get; set; }
         public List<TripCommentDto> Comments { get; set; }
+        public bool IsActive { get; set; }
     }
 }

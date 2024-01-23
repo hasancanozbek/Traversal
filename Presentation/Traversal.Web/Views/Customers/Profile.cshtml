@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CustomerViewModel
+<form id="customerForm" asp-action="Profile" asp-controller="Customers" method="post" enctype="multipart/form-data">
+    <div style="margin-top: 10%; margin-left: 10%; margin-right: 10%; margin-bottom: 10%;">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" asp-for="@Model.UpdateCustomerModel.Email" placeholder="@Model.CustomerModel.Email" />
+                </div>
+                <div class="form-group">
+                    <label>Telefon Numarası:</label>
+                    <input type="tel" class="form-control" asp-for="@Model.UpdateCustomerModel.CellPhone" placeholder="@Model.CustomerModel.CellPhone" />
+                </div>
+                <div class="form-group">
+                    <label>Şifre:</label>
+                    <input type="password" class="form-control" asp-for="@Model.UpdateCustomerModel.Password" />
+                </div>
+                <input type="hidden" asp-for="CustomerModel.Id" />
+            </div>
+            <div class="col-md-4">
+                <div style="border-left: 1px solid #ddd; padding-left: 20px;">
+                    <img src="@Model.CustomerModel.ProfilePhoto" style="width: 150px; height: 150px;" />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label>Profil Resmi Yükle:</label>
+                        <input type="file" class="form-control" asp-for="@Model.UpdateCustomerModel.ProfilePhoto" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <button type="button" class="btn btn-primary" onclick="submitForm()">Güncelle</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function submitForm() {
+        document.getElementById("customerForm").submit();
+    }
+</script>

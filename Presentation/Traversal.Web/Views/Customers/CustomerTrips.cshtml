@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "CustomerTrips";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CustomerViewModel
+
+<div style="margin-top: 10%; margin-left: 10%; margin-right: 10%; margin-bottom: 10%;">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tur</th>
+                <th scope="col">Fiyat</th>
+                <th scope="col">Gün Sayısı</th>
+                <th scope="col">Tarih</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var trip in Model.CustomerTripList)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td><a href="/Trips/TripDetail/@trip.TripId">@trip.TripName</a></td>
+                    <td>@trip.Price TL</td>
+                    <td>@trip.Day</td>
+                    <td>@trip.Date.ToShortDateString()</td>
+                    @if (trip.Date > DateTime.UtcNow)
+                    {
+                        <td><button class="btn btn-primary">Rezervasyon İptal</button></td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

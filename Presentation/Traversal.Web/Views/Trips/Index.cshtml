@@ -43,7 +43,11 @@
                                             }
                                         </a>
                                         <div class="info">
-                                            <h4><a href="/Trips/TripDetail/@trip.Id">@trip.Title</a></h4>
+                                            <h4>
+                                                <a href="/Trips/TripDetail/@trip.Id">@trip.Title</a>
+                                                <a class="btn btn-secondary ml-2" href="@Url.Action("Reservation", "Trips", new { tripId = trip.Id })">Rezervasyon</a>
+                                            </h4>
+
                                             <p>@trip.Day Gün</p>
                                             <div class="dst-btm">
                                                 <h6 class="">Fiyat</h6>

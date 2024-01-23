@@ -28,12 +28,8 @@ namespace BusinessLayer.Concretes
         public async Task<Result> DeleteGuide(GuideDto guide)
         {
             var entity = mapper.Map<Guide>(guide);
-            var isSuccessfull = await guideRepository.SetActivity(entity, false);
-            if (isSuccessfull)
-            {
-                return new SuccessResult("Guide deleted");
-            }
-            return new ErrorResult("Guide couldn't deleted");
+            await guideRepository.SetActivity(entity, false);
+            return new SuccessResult("Guide deleted");
         }
 
         public DataResult<List<GuideDto>> GetAllGuideList()
@@ -49,7 +45,7 @@ namespace BusinessLayer.Concretes
             if (guideEntity != null)
             {
                 guideEntity.Description = guide.Description ?? guideEntity.Description;
-                guideEntity.IsActive = 
+                guideEntity.IsActive =
                 await guideRepository.Update(guideEntity);
                 var guideDto = mapper.Map<GuideDto>(guideEntity);
                 return new SuccessDataResult<GuideDto>("Guide information updated", guideDto);

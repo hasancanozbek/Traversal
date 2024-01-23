@@ -33,7 +33,7 @@ namespace BusinessLayer.Concretes
             var tripId = await tripRepository.AddAsync(tripEntity);
             foreach (var image in trip.ImageList)
             {
-                var fileAssetId = await cloudRepo.UploadFileAsync(@image, FileTypesEnum.Image);
+                var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
                 if (!fileAssetId.Equals(string.Empty))
                 {
                     var keyValuePair = new TripKey()
@@ -56,9 +56,9 @@ namespace BusinessLayer.Concretes
             return new SuccessResult("Trip deleted");
         }
 
-        public DataResult<IQueryable<Trip>> GetAllTripsAsQueryable()
+        public DataResult<IQueryable<Trip>> GetAllTripsAsQueryable(bool tracking = false)
         {
-            var tripList = tripRepository.GetAll();
+            var tripList = tripRepository.GetAll(tracking);
             return new SuccessDataResult<IQueryable<Trip>>(tripList);
         }
 
@@ -122,5 +122,14 @@ namespace BusinessLayer.Concretes
             }
             return new ErrorDataResult<TripDto>("Trip couldn't update", null);
         }
+
+        public void SetActive(Trip entity, bool isActive)
+        {
+            if (entity != null)
+            {
+                tripRepository.SetActivity(entity, isActive);
+            }
+        }
+
     }
 }

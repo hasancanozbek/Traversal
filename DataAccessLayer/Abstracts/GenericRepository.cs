@@ -33,7 +33,7 @@ namespace DataAccessLayer.Abstracts
             {
                 query = query.AsNoTracking();
             }
-            return  query;
+            return query;
         }
 
         public async Task<T> GetByIdAsync(int id, bool tracking = true)
@@ -98,23 +98,10 @@ namespace DataAccessLayer.Abstracts
 
         public async Task<int> SaveAsync() => await context.SaveChangesAsync();
 
-        public async Task<bool> SetActivity(T entity, bool isActive)
+        public async Task SetActivity(T entity, bool isActive)
         {
-            var entityEntry = await GetByIdAsync(entity.Id);
-            if (entityEntry != null)
-            {
-                if (isActive)
-                {
-                    entityEntry.IsActive = true;
-                }
-                else
-                {
-                    entityEntry.IsActive = false;
-                }
-                await SaveAsync();
-                return true;
-            }
-            return false;
+            entity.IsActive = isActive;
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -1,7 +1,7 @@
 using DataAccessLayer.EntityFrameworkCore;
 using EntityLayer.Concretes;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Traversal.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +11,9 @@ builder.Services.AddBusinessServices();
 builder.Services.AddDataAccessServices();
 builder.Services.AddCoreServices();
 builder.Services.AddIdentity<User, UserRole>().AddEntityFrameworkStores<TraversalDbContext>();
-//builder.Services.AddMvc(config =>
-//{
-//    var policy = new AuthorizationPolicyBuilder()
-//    .RequireAuthenticatedUser()
-//    .Build();
-//    config.Filters.Add(new AuthorizeFilter(policy));
-//});
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>,
+    CustomClaimsPrincipalFactory>();
+
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -40,5 +36,13 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
 
 app.Run();

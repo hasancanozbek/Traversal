@@ -80,6 +80,14 @@ namespace BusinessLayer.Concretes
             return new SuccessDataResult<TripDateDto>("Trip date information listed", tripDateDto);
         }
 
+        public async Task SetActive(TripDate tripDate, bool isActive)
+        {
+            if (tripDate != null)
+            {
+                await tripDateRepository.SetActivity(tripDate, isActive);
+            }
+        }
+
         public async Task<DataResult<TripDateDto>> UpdateTripDate(UpdateTripDateDto tripDate, int tripDateId)
         {
             var tripDateEntity = await tripDateRepository.GetByIdAsync(tripDateId);

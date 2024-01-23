@@ -33,7 +33,7 @@ namespace BusinessLayer.Concretes
             var entityId = await blogRepository.AddAsync(blogEntity);
             foreach (var image in blog.ImageList)
             {
-                var fileAssetId = await cloudRepo.UploadFileAsync(@image, FileTypesEnum.Image);
+                var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
                 if (!fileAssetId.Equals(string.Empty))
                 {
                     var keyValuePair = new BlogKey()

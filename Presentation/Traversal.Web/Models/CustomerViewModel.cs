@@ -5,7 +5,7 @@ namespace Traversal.Web.Models
 {
     public class CustomerViewModel
     {
-        public AddCustomerDto AddCusmtomerModel { get; set; }
+        public UpdateCustomerDto UpdateCustomerModel { get; set; }
         public CustomerDto CustomerModel { get; set; }
         public List<CustomerTripDto> CustomerTripList { get; set; }
     }

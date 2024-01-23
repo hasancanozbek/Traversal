@@ -1,0 +1,60 @@
+﻿@using Traversal.Web.Areas.Admin.Models
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<AdminTripModel>
+
+<div class="card">
+    <h5 class="card-header">Tur Tablosu</h5>
+    <div class="table-responsive text-nowrap p-4 m-4 mt-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Tur Adı</th>
+                    <th>Toplam Kota</th>
+                    <th>Rezervasyon Sayısı</th>
+                    <th>Gün Sayısı</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Trip.Title</td>
+                        <td>@item.TripDateList.Sum(s => s.Quota)</td>
+                        <td>@item.TotalReservation</td>
+                        <td>@item.Trip.Day</td>
+                        @if (item.TripDateList.FirstOrDefault() != null)
+                        {
+                            <td>@item.TripDateList.OrderBy(o => o.Date).First(s => s.IsActive).Date.ToShortDateString()</td>
+                        }
+                        else
+                        {
+                            <td>@item.Trip.CreatedTime.ToShortDateString()</td>
+                        }
+                        <td><span class="badge bg-label-primary me-1">@item.Status</span></td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/Admin/AdminTrips/Update/@item.Trip.Id"><i class="bx bx-edit-alt me-1"></i>Düzenle</a>
+                                    <a class="dropdown-item" href="/Admin/AdminTrips/Delete/@item.Trip.Id"><i class="bx bx-trash me-1"></i>Sil</a>
+                                    <a class="dropdown-item" href="/Admin/AdminTrips/Variant/@item.Trip.Id"><i class="bx bx-edit-alt me-1"></i>Varyasyon Ekle</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<a href="/Admin/AdminTrips/Add" class="btn btn-style btn-primary">Yeni Tur Ekle</a>

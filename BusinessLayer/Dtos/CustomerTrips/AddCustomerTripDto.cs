@@ -3,7 +3,8 @@
     public class AddCustomerTripDto
     {
         public int CustomerId { get; set; }
-        public int TripId { get; set; }
+        public int TripDateId { get; set; }
+        public int Price { get; set; }
 
     }
 }

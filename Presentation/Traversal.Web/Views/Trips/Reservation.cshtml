@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Reservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model ReservationViewModel
+<div style="margin-top: 10%; margin-left: 10%; margin-right: 10%; margin-bottom: 10%;">
+    <h2>Rezervasyon Talebi</h2>
+
+    <form asp-action="Reservation" asp-controller="Trips" method="post">
+        <div class="form-group">
+            <label>Tur Tarihi Seçiniz:</label>
+            <select class="form-control"
+                    asp-for="SelectedTripDate"
+                    asp-items="new SelectList(Model.TripDateOptions)">
+                <option value="">Bir tarih seçin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="musteriBilgileri">Müşteri Bilgileri:</label>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Kayıtlı İsminiz:</label>
+                    <input asp-for="Customer.FirstName" class="form-control" readonly />
+
+                    <label>Kayıtlı Soyisminiz:</label>
+                    <input asp-for="Customer.LastName" class="form-control" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label>Kayıtlı Telefonunuz:</label>
+                    <input asp-for="Customer.CellPhone" class="form-control" readonly />
+                </div>
+            </div>
+            <label>Not: Tur rezervasyonları kayıtlı müşteriler tarafından yapılabilmektedir. Bilgilerinizde yanlışlık olduğunu düşünüyorsanız profilinizden bilgilerinizi kontrol ediniz.</label>
+        </div>
+        <input type="hidden" asp-for="Customer.Id" />
+        <input type="hidden" asp-for="Trip.Id" />
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Rezervasyon Talebi</button>
+        </div>
+    </form>
+</div>
