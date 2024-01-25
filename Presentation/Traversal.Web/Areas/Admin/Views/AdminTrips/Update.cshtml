@@ -1,0 +1,43 @@
+﻿@using Traversal.Web.Areas.Admin.Models
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AdminTripUpdateModel
+
+<h1>@Model.CurrentTrip.Title Güncelleme Sayfası</h1>
+<form asp-action="Update" asp-controller="AdminTrips" asp-area="Admin" method="post">
+    <div class="form-group">
+        <br />
+        <div class="row">
+            <br />
+            <div class="col-md-4">
+                <label>Tur Başlığı</label>
+                <input asp-for="Title" placeholder="@Model.CurrentTrip.Title" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label>Fiyat:</label>
+                <input asp-for="Price" placeholder="@Model.CurrentTrip.Price" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label>Rehber Id:</label>
+                <input asp-for="GuideId" placeholder="@Model.CurrentTrip.GuideId" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label>Toplam Gün:</label>
+                <input asp-for="Day" placeholder="@Model.CurrentTrip.Day" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Html Content</label>
+        <input asp-for="Content" placeholder="@Model.CurrentTrip.Content" class="form-control" />
+        <input type="hidden" asp-for="CurrentTrip.Id" value="@Model.CurrentTrip.Id" />
+    </div>
+    <div class="form-group">
+        <br />
+        <button type="submit" class="btn btn-primary">Turu Güncelle</button>
+    </div>
+</form>
+

@@ -35,9 +35,20 @@ namespace Traversal.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, true);
-                if (result.Succeeded)
+                if (HttpContext.User.Identity.IsAuthenticated)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    var user = await userManager.FindByIdAsync(userId.ToString());
+                    //Admin pass : Admin.1234
+                    //User pass : HasanCan.123
+                    if (user != null && user.IsAdmin)
+                    {
+                        return RedirectToAction("Index", "AdminTrips", new { area = "Admin" });
+                    }
+                    else if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError("Unauthorized", "Email veya şifre hatalı!");
             }

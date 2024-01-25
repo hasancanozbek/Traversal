@@ -74,18 +74,20 @@ namespace Core.Utilities.Cloud
         public async Task<GetResourceResult> GetFileWithUrl(string url)
         {
             var publicId = string.Empty;
-            for (int i = url.Length - 1; i >= 0; i--)
+            if (url != null)
             {
-                if (url[i] == '.')
+                for (int i = url.Length - 1; i >= 0; i--)
                 {
-                    for (int j = i - 1; j >= 0; j--)
+                    if (url[i] == '.')
                     {
-                        if (url[j] == '/')
+                        for (int j = i - 1; j >= 0; j--)
                         {
-                            publicId = url.Substring(j + 1, i - j - 1);
-                            var image = await cloudinary.GetResourceAsync(publicId);
-                            return image;
-
+                            if (url[j] == '/')
+                            {
+                                publicId = url.Substring(j + 1, i - j - 1);
+                                var image = await cloudinary.GetResourceAsync(publicId);
+                                return image;
+                            }
                         }
                     }
                 }

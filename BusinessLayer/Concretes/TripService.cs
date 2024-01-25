@@ -18,31 +18,34 @@ namespace BusinessLayer.Concretes
         private readonly ICloudRepo cloudRepo;
         private readonly ITripKeyRepository tripKeyRepository;
 
-		public TripService(ITripRepository tripRepository, IMapper mapper, ICloudRepo cloudRepo, ITripKeyRepository tripKeyRepository, ITripCommentService tripCommentService)
-		{
-			this.tripRepository = tripRepository;
-			this.mapper = mapper;
-			this.cloudRepo = cloudRepo;
-			this.tripKeyRepository = tripKeyRepository;
-			this.tripCommentService = tripCommentService;
-		}
+        public TripService(ITripRepository tripRepository, IMapper mapper, ICloudRepo cloudRepo, ITripKeyRepository tripKeyRepository, ITripCommentService tripCommentService)
+        {
+            this.tripRepository = tripRepository;
+            this.mapper = mapper;
+            this.cloudRepo = cloudRepo;
+            this.tripKeyRepository = tripKeyRepository;
+            this.tripCommentService = tripCommentService;
+        }
 
-		public async Task<Result> AddTrip(AddTripDto trip)
+        public async Task<Result> AddTrip(AddTripDto trip)
         {
             var tripEntity = mapper.Map<Trip>(trip);
             var tripId = await tripRepository.AddAsync(tripEntity);
-            foreach (var image in trip.ImageList)
+            if (trip.ImageList != null)
             {
-                var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
-                if (!fileAssetId.Equals(string.Empty))
+                foreach (var image in trip.ImageList)
                 {
-                    var keyValuePair = new TripKey()
+                    var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
+                    if (!fileAssetId.Equals(string.Empty))
                     {
-                        TripId = tripId,
-                        Key = BlogKeysEnum.image.ToString(),
-                        Value = fileAssetId
-                    };
-                    await tripKeyRepository.AddAsync(keyValuePair);
+                        var keyValuePair = new TripKey()
+                        {
+                            TripId = tripId,
+                            Key = BlogKeysEnum.image.ToString(),
+                            Value = fileAssetId
+                        };
+                        await tripKeyRepository.AddAsync(keyValuePair);
+                    }
                 }
             }
             return new SuccessResult("Trip added");
@@ -62,9 +65,14 @@ namespace BusinessLayer.Concretes
             return new SuccessDataResult<IQueryable<Trip>>(tripList);
         }
 
-        public DataResult<List<TripDto>> GetAllTripList()
+        public DataResult<List<TripDto>> GetAllTripList(bool includePassives = false)
         {
-            var tripList = tripRepository.GetAll().Include(i => i.Guide).ToList();
+            var trips = tripRepository.GetAll();
+            if (!includePassives)
+            {
+                trips = trips.Where(s => s.IsActive);
+            }
+            var tripList = trips.Include(i => i.Guide).ToList();
             var tripListDto = mapper.Map<List<TripDto>>(tripList);
             foreach (var trip in tripListDto)
             {
@@ -95,7 +103,7 @@ namespace BusinessLayer.Concretes
 
                 tripDto.Comments = tripCommentService.GetCommentListOfTripById(trip.Id).Data;
 
-				tripDto.ImageList = new List<string>();
+                tripDto.ImageList = new List<string>();
                 var imageKeys = tripKeyRepository.GetWhere(s => s.TripId == trip.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
                 foreach (var imageId in imageKeys)
                 {
@@ -113,9 +121,9 @@ namespace BusinessLayer.Concretes
             {
                 tripEntity.Title = trip.Title ?? tripEntity.Title;
                 tripEntity.Content = trip.Content ?? tripEntity.Content;
-                tripEntity.Price = trip.Price == 0 ? tripEntity.Price : trip.Price;
-                tripEntity.Day = trip.Day == 0 ? tripEntity.Day : trip.Day;
-                tripEntity.GuideId = trip.GuideId == 0 ? tripEntity.GuideId : trip.GuideId;
+                tripEntity.Price = trip.Price ?? tripEntity.Price;
+                tripEntity.Day = trip.Day ?? tripEntity.Day;
+                tripEntity.GuideId = trip.GuideId ?? tripEntity.GuideId;
                 await tripRepository.Update(tripEntity);
                 var mappedTrip = mapper.Map<TripDto>(tripEntity);
                 return new SuccessDataResult<TripDto>("Trip updated", mappedTrip);

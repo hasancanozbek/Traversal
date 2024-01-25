@@ -67,7 +67,7 @@ namespace Traversal.Web.Controllers
                     return RedirectToAction("BlogDetail", new { id = model.AddBlogCommentDto.BlogId });
                 }
             };
-            return View("/Blogss/Index");
+            return View("/Blogs/Index");
         }
     }
 }

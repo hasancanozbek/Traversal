@@ -28,17 +28,6 @@ namespace Traversal.API.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetBlogListByCustomerId")]
-        public IActionResult GetBlogListByCustomerId(int customerId)
-        {
-            var result = blogService.GetBlogListByCustomerId(customerId);
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
         [HttpGet("GetBlogById")]
         public async Task<IActionResult> GetBlogById(int id)
         {

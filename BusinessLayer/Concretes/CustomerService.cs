@@ -48,22 +48,31 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<CustomerDto>> GetAllCustomerList()
         {
-            var customerList = customerRepository.GetAll().ToList();
+            var customerList = customerRepository.GetAll().Include(i => i.User).ToList();
             var mappedList = mapper.Map<List<CustomerDto>>(customerList);
+            mappedList.ForEach(f =>
+            {
+                f.Email = customerList.First(s => s.Id == f.Id).User.Email;
+                f.CellPhone = customerList.First(s => s.Id == f.Id).User.PhoneNumber;
+            });
             return new SuccessDataResult<List<CustomerDto>>("Returned customer list", mappedList);
         }
 
         public async Task<DataResult<CustomerDto>> GetCustomerById(int customerId)
         {
             var customer = await customerRepository.GetByIdAsync(customerId);
-            var customerDto = mapper.Map<CustomerDto>(customer);
-            return new SuccessDataResult<CustomerDto>("Customer information brought", customerDto);
+            if (customer != null)
+            {
+                var customerDto = mapper.Map<CustomerDto>(customer);
+                return new SuccessDataResult<CustomerDto>("Customer information brought", customerDto);
+            }
+            return new ErrorDataResult<CustomerDto>(null);
         }
 
         public async Task<DataResult<CustomerDto>> UpdateCustomer(int customerId, UpdateCustomerDto customer)
         {
             var customerEntity = await customerRepository.GetWhere(s => s.Id == customerId).Include(i => i.User).FirstOrDefaultAsync();
-            if (customerEntity != null)
+            if (customerEntity != null && customerEntity.User != null)
             {
                 customerEntity.User.Email = customer.Email != null ? customer.Email : customerEntity.User.Email;
                 customerEntity.User.PhoneNumber = customer.CellPhone != null ? customer.CellPhone : customerEntity.User.PhoneNumber;

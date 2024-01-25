@@ -1,0 +1,30 @@
+﻿@using Traversal.Web.Areas.Admin.Models
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AdminUpdateBlogModel
+
+<h1>"@Model.CurrentBlog.Title" Güncelleme Sayfası</h1>
+<form asp-action="Update" asp-controller="AdminBlogs" asp-area="Admin" method="post">
+    <div class="form-group">
+        <br />
+        <div class="row">
+            <br />
+            <div class="col-md-4">
+                <label>İçerik Başlığı</label>
+                <input asp-for="UpdateBlog.Title" placeholder="@Model.CurrentBlog.Title" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Html Content</label>
+        <input asp-for="UpdateBlog.Content" placeholder="@Model.CurrentBlog.Content" class="form-control" />
+        <input type="hidden" asp-for="CurrentBlog.Id" value="@Model.CurrentBlog.Id" />
+    </div>
+    <div class="form-group">
+        <br />
+        <button type="submit" class="btn btn-primary">İçeriği Güncelle</button>
+    </div>
+</form>

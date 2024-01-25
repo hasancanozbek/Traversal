@@ -40,7 +40,10 @@ namespace DataAccessLayer.EntityFrameworkCore
 			.WithOne(a => a.Guide)
 			.HasForeignKey<Guide>(c => c.UserId);
 
-			base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<Trip>().HasQueryFilter(c => c.IsActive);
+            //modelBuilder.Entity<Blog>().HasQueryFilter(c => c.IsActive);
+
+            base.OnModelCreating(modelBuilder);
 		}
 
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

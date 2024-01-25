@@ -5,7 +5,7 @@ namespace EntityLayer.Concretes
     public class User : IdentityUser<int>
     {
         public string? ProfilePhotoUrl { get; set; }
-
+        public bool IsAdmin { get; set; }
         public Customer Customer { get; set; }
         public Guide Guide { get; set; }
     }

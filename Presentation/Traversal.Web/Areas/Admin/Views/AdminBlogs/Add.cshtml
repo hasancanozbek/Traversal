@@ -1,0 +1,31 @@
+﻿@using BusinessLayer.Dtos.Blogs
+@using Traversal.Web.Areas.Admin.Models
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model AddBlogDto
+
+<h1>Yeni Yazı Ekleme Sayfası</h1>
+<form asp-action="Add" asp-controller="AdminBlogs" asp-area="Admin" method="post">
+    <div class="form-group">
+        <br />
+        <div class="row">
+            <br />
+            <div class="col-md-4">
+                <label>Yazı Başlığı</label>
+                <input asp-for="Title" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Html Content</label>
+        <input asp-for="Content" class="form-control" />
+    </div>
+    <div class="form-group">
+        <br />
+        <button type="submit" class="btn btn-primary">İçeriği Oluştur</button>
+    </div>
+</form>
+

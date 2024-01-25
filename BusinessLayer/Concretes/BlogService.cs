@@ -18,31 +18,34 @@ namespace BusinessLayer.Concretes
         private readonly ICloudRepo cloudRepo;
         private readonly IMapper mapper;
 
-		public BlogService(IBlogRepository blogRepository, IMapper mapper, IBlogKeyRepository blogKeyRepository, ICloudRepo cloudRepo, IBlogCommentService blogCommentService)
-		{
-			this.blogRepository = blogRepository;
-			this.mapper = mapper;
-			this.blogKeyRepository = blogKeyRepository;
-			this.cloudRepo = cloudRepo;
-			this.blogCommentService = blogCommentService;
-		}
+        public BlogService(IBlogRepository blogRepository, IMapper mapper, IBlogKeyRepository blogKeyRepository, ICloudRepo cloudRepo, IBlogCommentService blogCommentService)
+        {
+            this.blogRepository = blogRepository;
+            this.mapper = mapper;
+            this.blogKeyRepository = blogKeyRepository;
+            this.cloudRepo = cloudRepo;
+            this.blogCommentService = blogCommentService;
+        }
 
-		public async Task<Result> AddBlog(AddBlogDto blog)
+        public async Task<Result> AddBlog(AddBlogDto blog)
         {
             var blogEntity = mapper.Map<Blog>(blog);
             var entityId = await blogRepository.AddAsync(blogEntity);
-            foreach (var image in blog.ImageList)
+            if (blog.ImageList != null)
             {
-                var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
-                if (!fileAssetId.Equals(string.Empty))
+                foreach (var image in blog.ImageList)
                 {
-                    var keyValuePair = new BlogKey()
+                    var fileAssetId = await cloudRepo.UploadFileAsync(image, FileTypesEnum.Image);
+                    if (!fileAssetId.Equals(string.Empty))
                     {
-                        BlogId = entityId,
-                        Key = BlogKeysEnum.image.ToString(),
-                        Value = fileAssetId
-                    };
-                    await blogKeyRepository.AddAsync(keyValuePair);
+                        var keyValuePair = new BlogKey()
+                        {
+                            BlogId = entityId,
+                            Key = BlogKeysEnum.image.ToString(),
+                            Value = fileAssetId
+                        };
+                        await blogKeyRepository.AddAsync(keyValuePair);
+                    }
                 }
             }
             return new SuccessResult("Blog added");
@@ -58,17 +61,20 @@ namespace BusinessLayer.Concretes
             return new SuccessResult("Blog deleted");
         }
 
-        public DataResult<List<BlogDto>> GetAllBlogList()
+        public DataResult<List<BlogDto>> GetAllBlogList(bool includePassives = false)
         {
-            var blogList = blogRepository.GetAll().Include(i => i.Customer).ToList();
+            var blogs = blogRepository.GetAll();
+            if (!includePassives)
+            {
+                blogs = blogs.Where(s => s.IsActive);
+            }
+            var blogList = blogs.ToList();
             var blogListDto = mapper.Map<List<BlogDto>>(blogList);
             blogListDto.ForEach(blog =>
             {
                 var tmpBlog = blogList.First(s => s.Id == blog.Id);
-                blog.CustomerFirstName = tmpBlog.Customer.FirstName;
-                blog.CustomerLastName = tmpBlog.Customer.LastName;
-				blog.Comments = blogCommentService.GetCommentListOfBlogById(blog.Id).Data;
-				blog.ImageList = new List<string>();
+                blog.Comments = blogCommentService.GetCommentListOfBlogById(blog.Id).Data;
+                blog.ImageList = new List<string>();
                 var imageKeys = blogKeyRepository.GetWhere(s => s.BlogId == blog.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
                 foreach (var image in imageKeys)
                 {
@@ -79,18 +85,16 @@ namespace BusinessLayer.Concretes
             return new SuccessDataResult<List<BlogDto>>(blogListDto);
         }
 
-        public DataResult<IQueryable<Blog>> GetAllBlogsAsQueryable()
+        public DataResult<IQueryable<Blog>> GetAllBlogsAsQueryable(bool tracking = false)
         {
-            var blogList = blogRepository.GetAll();
+            var blogList = blogRepository.GetAll(tracking);
             return new SuccessDataResult<IQueryable<Blog>>(blogList);
         }
 
         public async Task<DataResult<BlogDto>> GetBlogById(int blogId)
         {
-            var blog = await blogRepository.GetWhere(s => s.Id == blogId).Include(i => i.Customer).FirstOrDefaultAsync();
+            var blog = await blogRepository.GetWhere(s => s.Id == blogId).FirstOrDefaultAsync();
             var blogDto = mapper.Map<BlogDto>(blog);
-            blogDto.CustomerFirstName = blog.Customer.FirstName;
-            blogDto.CustomerLastName = blog.Customer.LastName;
 
             blogDto.Comments = blogCommentService.GetCommentListOfBlogById(blogId).Data;
 
@@ -105,32 +109,12 @@ namespace BusinessLayer.Concretes
             return new SuccessDataResult<BlogDto>("Blog information listed", blogDto);
         }
 
-        public DataResult<List<BlogDto>> GetBlogListByCustomerId(int customerId)
+        public async Task SetActive(Blog entity, bool isActive)
         {
-            var blogList = blogRepository.GetWhere(s => s.CustomerId == customerId).Include(i => i.Customer).ToList();
-            if (blogList.Any())
+            if (entity != null)
             {
-                var customerFirstName = blogList.First().Customer.FirstName;
-                var customerLastName = blogList.First().Customer.LastName;
-                var blogListDto = mapper.Map<List<BlogDto>>(blogList);
-                blogListDto.ForEach(blog =>
-                {
-                    blog.CustomerFirstName = customerFirstName;
-                    blog.CustomerLastName = customerLastName;
-					blog.Comments = blogCommentService.GetCommentListOfBlogById(blog.Id).Data;
-
-					blog.ImageList = new List<string>();
-                    var imageKeys = blogKeyRepository.GetWhere(s => s.BlogId == blog.Id && s.Key == BlogKeysEnum.image.ToString()).OrderBy(o => o.CreatedTime).Select(s => s.Value).ToList();
-                    foreach (var image in imageKeys)
-                    {
-                        var url = cloudRepo.GetFileUrl(image);
-                        blog.ImageList.Add(url);
-                    }
-
-                });
-                return new SuccessDataResult<List<BlogDto>>(blogListDto);
+                await blogRepository.SetActivity(entity, isActive);
             }
-            return new ErrorDataResult<List<BlogDto>>("No blogs belonging to the customer were found", null);
         }
 
         public async Task<DataResult<BlogDto>> UpdateBlog(UpdateBlogDto blog, int blogId)

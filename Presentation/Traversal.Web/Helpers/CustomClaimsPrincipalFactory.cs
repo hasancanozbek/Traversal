@@ -14,12 +14,11 @@ namespace Traversal.Web.Helpers
                 : base(userManager, optionsAccessor)
         {
         }
- 
+
         public async override Task<ClaimsPrincipal> CreateAsync(User user)
         {
             var principal = await base.CreateAsync(user);
-
-            if (!string.IsNullOrEmpty(user.PhoneNumber))
+            if (!string.IsNullOrEmpty(user.ProfilePhotoUrl))
             {
                 if (principal.Identity != null)
                 {
@@ -27,7 +26,6 @@ namespace Traversal.Web.Helpers
                         new[] { new Claim("ProfilePhotoUrl", user.ProfilePhotoUrl) });
                 }
             }
-
             return principal;
         }
     }

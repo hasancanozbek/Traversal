@@ -54,7 +54,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="#" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <svg width="25"
                                  viewBox="0 0 25 42"
@@ -111,7 +111,7 @@
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
                     <li class="menu-item">
-                        <a href="index.html" class="menu-link">
+                        <a href="/Admin/AdminTrips/Index" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Analytics">Dashboard</div>
                         </a>
@@ -119,14 +119,14 @@
 
                     <!-- Layouts -->
                     <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <a href="/Admin/AdminProfile/Index" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-layout"></i>
                             <div data-i18n="Layouts">Profil Ayarları</div>
                         </a>
 
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="layouts-without-menu.html" class="menu-link">
+                                <a href="/Admin/AdminProfile/Index" class="menu-link">
                                     <div data-i18n="Without menu">Kullanıcı İşlemleri</div>
                                 </a>
                             </li>
@@ -143,12 +143,12 @@
                         </a>
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="pages-account-settings-account.html" class="menu-link">
+                                <a href="/Admin/AdminTrips/Index" class="menu-link">
                                     <div data-i18n="Account">Tur Listesi</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="pages-account-settings-notifications.html" class="menu-link">
+                                <a href="/Admin/AdminTrips/Add" class="menu-link">
                                     <div data-i18n="Notifications">Tur Ekle</div>
                                 </a>
                             </li>
@@ -161,31 +161,13 @@
                         </a>
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="auth-login-basic.html" class="menu-link" target="_blank">
+                                <a href="/Admin/AdminBlogs/Index" class="menu-link">
                                     <div data-i18n="Basic">Blog Listesi</div>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="auth-register-basic.html" class="menu-link" target="_blank">
+                                <a href="/Admin/AdminBlogs/Add" class="menu-link">
                                     <div data-i18n="Basic">Blog Ekle</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                            <div data-i18n="Misc">Diğer Sayfalar</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="pages-misc-error.html" class="menu-link">
-                                    <div data-i18n="Error">Hakkında</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="pages-misc-under-maintenance.html" class="menu-link">
-                                    <div data-i18n="Under Maintenance">İletişim</div>
                                 </a>
                             </li>
                         </ul>
@@ -195,7 +177,7 @@
                         <span class="menu-header-text">Müşteriler</span>
                     </li>
                     <li class="menu-item">
-                        <a href="javascript:void(0);" class="menu-link">
+                        <a href="/Admin/AdminCustomers/Index" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-dock-top"></i>
                             <div data-i18n="Account Settings">Müşteri Listesi</div>
                         </a>
@@ -222,7 +204,7 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="~/sneat-1.0.0/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="https://res.cloudinary.com/dr86l8ihb/image/upload/v1706200501/png-clipart-customer-service-call-centre-technical-support-help-desk-business-angle-microphone_qbibjb.png" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -231,11 +213,11 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="~/sneat-1.0.0/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                                        <img src="https://res.cloudinary.com/dr86l8ihb/image/upload/v1706200501/png-clipart-customer-service-call-centre-technical-support-help-desk-business-angle-microphone_qbibjb.png" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">John Doe</span>
+                                                    <span class="fw-semibold d-block">Admin Kullanıcısı</span>
                                                     <small class="text-muted">Admin</small>
                                                 </div>
                                             </div>
@@ -244,17 +226,17 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    <li>
+@*                                     <li>
                                         <a class="dropdown-item" href="#">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">Profilim</span>
                                         </a>
-                                    </li>
+                                    </li> *@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-basic.html">
+                                        <a class="dropdown-item" href="@Url.Action("Logout", "Login")">
                                             <i class="bx bx-power-off me-2"></i>
                                             <span class="align-middle">Çıkış Yap</span>
                                         </a>

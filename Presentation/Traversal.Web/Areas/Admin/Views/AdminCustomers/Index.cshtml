@@ -1,0 +1,43 @@
+﻿@using BusinessLayer.Dtos.Customers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<CustomerDto>
+
+<div class="card">
+    <h5 class="card-header">Müşteri Tablosu</h5>
+    <div class="table-responsive text-nowrap p-4 m-4 mt-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Müşteri Adı</th>
+                    <th>Müşteri Soyadı</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th>Doğum Tarihi</th>
+                    <th>Üyelik Tarihi</th>
+                    <th>Aktif Mi</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.Email</td>
+                        <td>@item.CellPhone</td>
+                        <td>@item.BirthDate</td>
+                        <td>@item.CreatedTime</td>
+                        <td><span class="badge bg-label-primary me-1">@item.IsActive</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

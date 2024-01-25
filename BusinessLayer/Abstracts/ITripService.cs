@@ -6,7 +6,7 @@ namespace BusinessLayer.Abstracts
 {
     public interface ITripService
     {
-        DataResult<List<TripDto>> GetAllTripList();
+        DataResult<List<TripDto>> GetAllTripList(bool includePassives = false);
         DataResult<IQueryable<Trip>> GetAllTripsAsQueryable(bool tracking = false);
         Task<DataResult<TripDto>> GetTripById(int tripId);
         Task<DataResult<TripDto>> UpdateTrip(UpdateTripDto trip, int tripId);

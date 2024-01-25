@@ -89,7 +89,8 @@ namespace BusinessLayer.Concretes
 
         public DataResult<List<CustomerTripDto>> GetCustomerTripListByTripId(int tripId)
         {
-            var customerTrips = customerTripRepository.GetWhere(s => s.TripDateId == tripId).Include(i => i.Customer).Include(i => i.TripDate.Trip).ToList();
+            var customerTripDateIdList = tripDateService.GetAllTripDaysOfTripById(tripId).Data.Select(s => s.Id).ToList();
+            var customerTrips = customerTripRepository.GetWhere(s => customerTripDateIdList.Contains(s.TripDateId)).Include(i => i.Customer).Include(i => i.TripDate.Trip).ToList();
             var customerTripsDto = mapper.Map<List<CustomerTripDto>>(customerTrips);
             customerTripsDto.ForEach(customerTrip =>
             {

@@ -1,0 +1,51 @@
+﻿@using BusinessLayer.Dtos.Blogs
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<BlogDto>
+
+<div class="card">
+    <h5 class="card-header">Tur Tablosu</h5>
+    <div class="table-responsive text-nowrap p-4 m-4 mt-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Blog Id</th>
+                    <th>Başlık</th>
+                    <th>İçerik</th>
+                    <th>Yayınlama Tarihi</th>
+                    <th>Önyüzde Görünürlüğü</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Title</td>
+                        <td>@item.Content</td>
+                        <td>@item.CreatedTime</td>
+                        <td><span class="badge bg-label-primary me-1">@item.IsActive</span></td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/Admin/AdminBlogs/Update/@item.Id"><i class="bx bx-edit-alt me-1"></i>Düzenle</a>
+                                    <a class="dropdown-item" href="/Admin/AdminBlogs/Delete/@item.Id"><i class="bx bx-trash me-1"></i>Sil</a>
+                                    <a class="dropdown-item" href="/Blogs/BlogDetail/@item.Id"><i class="bx bx-edit-alt me-1"></i>Sayfada Gör</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<a href="/Admin/AdminBlogs/Add" class="btn btn-style btn-primary">Yeni Blog Ekle</a>

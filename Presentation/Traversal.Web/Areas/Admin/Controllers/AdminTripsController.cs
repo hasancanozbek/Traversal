@@ -7,7 +7,7 @@ using Traversal.Web.Areas.Admin.Models;
 namespace Traversal.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("admin/[controller]")]
+    [Route("Admin/[controller]")]
     public class AdminTripsController : Controller
     {
         private readonly ITripService tripService;
@@ -25,7 +25,7 @@ namespace Traversal.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var model = new List<AdminTripModel>();
-            var tripList = tripService.GetAllTripList();
+            var tripList = tripService.GetAllTripList(includePassives: true);
             if (tripList != null && tripList.IsSuccess)
             {
                 foreach (var trip in tripList.Data)
@@ -90,7 +90,6 @@ namespace Traversal.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        //[Route("Admin/AdminTrips/AddVariant")]
         [HttpPost("AddVariant")]
         public async Task<IActionResult> AddVariant(AdminTripDateModel model)
         {
@@ -108,14 +107,32 @@ namespace Traversal.Web.Areas.Admin.Controllers
         }
 
         [HttpGet("Update/{Id}")]
-        public IActionResult Update(int Id)
+        public async Task<IActionResult> Update(int Id)
         {
-            return View();
+            var trip = await tripService.GetTripById(Id);
+            var model = new AdminTripUpdateModel()
+            {
+                CurrentTrip = trip.Data
+            };
+            return View(model);
         }
 
         [HttpPost("Update")]
-        public IActionResult Update(AdminTripUpdateModel model)
+        public async Task<IActionResult> Update(AdminTripUpdateModel model)
         {
+            if (model != null)
+            {
+                var updateTripDto = new UpdateTripDto
+                {
+                    Title = model.Title,
+                    Content = model.Content,
+                    Price = model.Price,
+                    GuideId = model.GuideId,
+                    Day = model.Day
+                };
+                await tripService.UpdateTrip(updateTripDto, model.CurrentTrip.Id);
+                return RedirectToAction("Index", "AdminTrips");
+            }
             return View();
         }
 

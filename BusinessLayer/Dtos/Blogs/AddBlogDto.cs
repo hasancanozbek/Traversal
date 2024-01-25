@@ -7,6 +7,5 @@ namespace BusinessLayer.Dtos.Blogs
         public string Content { get; set; }
         public string Title { get; set; }
         public IFormFileCollection ImageList { get; set; }
-        public int CustomerId { get; set; }
     }
 }

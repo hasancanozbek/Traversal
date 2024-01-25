@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(TraversalDbContext))]
-    partial class TraversalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125120423_blog_refactored2")]
+    partial class blog_refactored2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +40,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -48,6 +54,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Blogs");
                 });
@@ -546,9 +554,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("boolean");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -727,6 +732,13 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("EntityLayer.Concretes.Blog", b =>
+                {
+                    b.HasOne("EntityLayer.Concretes.Customer", null)
+                        .WithMany("BlogList")
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("EntityLayer.Concretes.BlogComment", b =>
@@ -968,6 +980,8 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityLayer.Concretes.Customer", b =>
                 {
                     b.Navigation("BlogComments");
+
+                    b.Navigation("BlogList");
 
                     b.Navigation("TripComments");
                 });
