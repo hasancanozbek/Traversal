@@ -22,6 +22,7 @@ namespace Traversal.Web.Controllers
             var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
             var result = customerService.GetCustomerByUserId(userId);
             var model = new CustomerViewModel();
+
             if (result.IsSuccess)
             {
                 model.CustomerModel = result.Data;

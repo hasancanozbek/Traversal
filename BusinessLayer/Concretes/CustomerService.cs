@@ -74,7 +74,11 @@ namespace BusinessLayer.Concretes
             var customerEntity = await customerRepository.GetWhere(s => s.Id == customerId).Include(i => i.User).FirstOrDefaultAsync();
             if (customerEntity != null && customerEntity.User != null)
             {
-                customerEntity.User.Email = customer.Email != null ? customer.Email : customerEntity.User.Email;
+                if (customer.Email != null)
+                {
+                    customerEntity.User.Email = customer.Email;
+                    customerEntity.User.UserName = customer.Email;
+                }
                 customerEntity.User.PhoneNumber = customer.CellPhone != null ? customer.CellPhone : customerEntity.User.PhoneNumber;
                 if (customer.ProfilePhoto != null)
                 {
